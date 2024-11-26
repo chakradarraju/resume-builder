@@ -9,7 +9,7 @@ import { useProfile } from '../app/ProfileContext';
 const Header: React.FC<{}> = () => {
   const { unsavedChanges, saveProfileToLocalStorage } = useProfile();
 
-  return <div className="w-full flex fixed">
+  return <div className="w-full flex fixed z-[200]">
     <div className="p-4 bg-black text-white rounded-xl flex m-3 grow">
       <HiMiniQueueList className="my-auto m-1" /> 
       <div className="text-lg font-bold flex-1 my-auto">

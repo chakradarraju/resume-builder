@@ -1,5 +1,6 @@
 import Profile from "@/types/profile";
 import Image from "next/image";
+import { IoCloseCircle } from "react-icons/io5";
 import { MdPersonAdd } from "react-icons/md";
 
 const ProfilePic: React.FC<{ profile: Profile, setProfile: React.Dispatch<React.SetStateAction<Profile>> }> = ({ profile, setProfile }) => {
@@ -21,8 +22,11 @@ const ProfilePic: React.FC<{ profile: Profile, setProfile: React.Dispatch<React.
   }
 
   return (<>
-    {profile.picture && <Image src={profile.picture} width={256} height={256} alt="Image" className="w-64 h-64 rounded-full text-center object-cover"/>}
-    {!profile.picture && <div className="bg-gray-500 rounded-full w-64 h-64 m-4">
+    {profile.picture && <div className="group relative">
+      <Image src={profile.picture} width={256} height={256} alt="Image changed" className="w-64 h-64 rounded-full text-center object-cover"/>
+      <IoCloseCircle className="absolute top-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200" onClick={() => setProfile({...profile, picture: null})} />
+    </div>}
+    {!profile.picture && <div className="bg-gray-500 rounded-full w-64 h-64">
       <label className="flex flex-col items-center justify-center w-full h-full">
         <MdPersonAdd />
         <div>Choose pic</div>
