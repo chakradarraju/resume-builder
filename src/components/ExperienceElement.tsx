@@ -1,5 +1,5 @@
 import Profile, { Experience, SectionItem } from "@/types/profile";
-import { TimelineConnector, TimelineContent, TimelineTitle, TimelineDescription, TimelineItem, TimelineRoot } from "@chakra-ui/react";
+import { TimelineConnector, TimelineContent, TimelineDescription, TimelineItem, TimelineRoot } from "@chakra-ui/react";
 import { MdMoveDown, MdMoveUp, MdPlaylistAdd, MdWork } from "react-icons/md";
 import EditableText from "./EditableText";
 import { useProfile } from "@/app/ProfileContext";
