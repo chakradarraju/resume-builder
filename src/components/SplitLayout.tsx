@@ -1,12 +1,29 @@
 import { Button, Input, MenuContent, MenuItem, MenuRoot, MenuTrigger } from "@chakra-ui/react";
 import ProfilePic from "./ProfilePic";
 import Profile, { SectionItem } from "@/types/profile";
-import { render } from "@/lib/partRender";
 import EditableText from "./EditableText";
+import EducationElement from "@/components/EducationElement";
+import ExperienceElement from "@/components/ExperienceElement";
+import GenericElement from "@/components/GenericElement";
+import {Experience, Education} from "@/types/profile";
 
 interface ProfileEditor {
   profile: Profile,
   setProfile: React.Dispatch<React.SetStateAction<Profile>>
+}
+
+function isExperience(p: SectionItem): p is Experience {
+  return (p as Experience).experiences !== undefined;
+}
+
+function isEducation(p: SectionItem): p is Education {
+  return (p as Education).course !== undefined;
+}
+
+export function render(p: SectionItem, idx: number, section: "SECTION1" | "SECTION2") {
+  if (isExperience(p)) return <ExperienceElement key={idx} experience={p} section={section} sectionIndex={idx} id={`${section}-${idx}`} />;
+  if (isEducation(p)) return <EducationElement key={idx} education={p} section={section} sectionIndex={idx} id={`${section}-${idx}`} />;
+  return <GenericElement key={idx} part={p} section={section} sectionIndex={idx} id={`${section}-${idx}`} />;
 }
 
 const AddButton: React.FC<ProfileEditor & { onAdd: (t: SectionItem) => void, allowExpEdu?: boolean }> = ({ profile, setProfile, onAdd, allowExpEdu = true }) => {
