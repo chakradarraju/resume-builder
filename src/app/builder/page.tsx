@@ -3,8 +3,6 @@
 import ResumeLayout from "@/components/ResumeLayout";
 import { useEffect } from "react";
 import { useProfile } from '../ProfileContext';
-import { useConfig } from "../ConfigContext";
-import SingleLayout from "@/components/SingleLayout";
 
 const Page: React.FC = () => {
   const {profile, setProfile} = useProfile();
