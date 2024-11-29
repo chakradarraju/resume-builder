@@ -33,7 +33,7 @@ const GenericElement: React.FC<{ part: Part, section: "SECTION1" | "SECTION2", s
   return (<div className="relative group">
     <PartHoverMenu section={section} sectionIndex={sectionIndex} />
     <EditableText placeholder="Heading" value={part.heading} className="text-2xl" onChange={ele => updatePart({heading: ele.target.value})} />
-    {part.type === "TEXT" && <EditableText placeholder="Description" value={part.text} onChange={ele => updatePart({text: ele.target.value})} />}
+    {part.type === "TEXT" && <EditableText placeholder="Description" multiline value={part.text} onChange={ele => updatePart({text: ele.target.value})} />}
     {part.type === "LIST" && <ul>
       {part.list?.map((i, key) => <li key={key}><EditableText placeholder="..." value={i} onChange={ele => updateList(key, ele.target.value)} /></li>)}
     </ul>}

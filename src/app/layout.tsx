@@ -5,6 +5,7 @@ import "./globals.css";
 import { Provider } from "@/components/ui/provider"
 import { ProfileProvider } from './ProfileContext';
 import { ColorModeProvider } from '@/components/ui/color-mode';
+import { ConfigProvider } from './ConfigContext';
 
 export default function RootLayout({ children }: Readonly<{children: React.ReactNode}>) {
   return (
@@ -15,9 +16,11 @@ export default function RootLayout({ children }: Readonly<{children: React.React
       <body className={`${nunito.className} antialiased h-full min-h-screen`}>
         <Provider>
           <ProfileProvider>
-            <ColorModeProvider forcedTheme="light">
-              {children}              
-            </ColorModeProvider>
+            <ConfigProvider>
+              <ColorModeProvider forcedTheme="light">
+                {children}              
+              </ColorModeProvider>
+            </ConfigProvider>
           </ProfileProvider>       
         </Provider>
       </body>
