@@ -1,7 +1,9 @@
 import { createContext, useContext, useMemo, useState } from "react";
 
+export type LayoutEnum = ("SINGLE" | "SPLIT")
+
 export interface Config {
-  layout: "SINGLE" | "SPLIT"
+  layout: LayoutEnum
 }
 
 interface ConfigContextType {

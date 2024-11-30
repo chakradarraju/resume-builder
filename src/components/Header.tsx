@@ -5,16 +5,14 @@ import { FaSave } from "react-icons/fa";
 import { FaDownload } from "react-icons/fa6";
 import { HiMiniQueueList } from "react-icons/hi2";
 import { useProfile } from '../app/ProfileContext';
-import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from "@chakra-ui/react/menu";
-import { Config, useConfig } from "@/app/ConfigContext";
-import ProfileEditor from "@/types/profileEditor";
+import { Config, LayoutEnum, useConfig } from "@/app/ConfigContext";
 import { SectionItem } from "@/types/profile";
 import { BsWindowFullscreen, BsWindowSidebar } from "react-icons/bs";
 import { Separator } from "@chakra-ui/react/separator";
-import { Portal } from "@chakra-ui/react/portal";
 import { PopoverArrow, PopoverBody, PopoverContent, PopoverRoot, PopoverTrigger } from "./ui/popover";
 import { SegmentedControl } from "./ui/segmented-control";
-import { HStack } from "@chakra-ui/react"
+import { HStack } from "@chakra-ui/react";
+
 const LayoutButton: React.FC<{config: Config, setConfig: React.Dispatch<React.SetStateAction<Config>>}> = ({config, setConfig}) => {
   return (<div className="flex">
     <PopoverRoot positioning={{ placement: "bottom" }}>
@@ -26,7 +24,7 @@ const LayoutButton: React.FC<{config: Config, setConfig: React.Dispatch<React.Se
       <PopoverContent>
         <PopoverArrow />
         <PopoverBody>
-          <SegmentedControl defaultValue={config.layout} value={config.layout} onChange={(e) => { console.log('Setting layout', e.target.value); setConfig({layout: e.target.value})} } items={[
+          <SegmentedControl value={config.layout} onValueChange={({value}: {value: LayoutEnum}) => setConfig({layout: value}) } items={[
             // "SINGLE" | "SPLIT"
             { value: "SINGLE", label: <HStack><BsWindowFullscreen /> Classic layout</HStack> },
             { value: "SPLIT", label: <HStack><BsWindowSidebar /> Split layout</HStack>}]} />
