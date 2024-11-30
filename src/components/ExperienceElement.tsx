@@ -45,7 +45,7 @@ const ExperienceElement: React.FC<{ experience: Experience, section: "SECTION1" 
         <TimelineConnector>
           <MdWork />
         </TimelineConnector>
-        <TimelineContent className="pb-0">
+        <TimelineContent className="pb-0 gap-0">
           <TimelineTitle className="flex">
             <EditableText placeholder="Company" value={e.company} className="text-lg" onChange={eve => updateExperience(idx, {company: eve.target.value})} />
           </TimelineTitle>

@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from "@chakra-ui/react";
-import { FaSave } from "react-icons/fa";
+import { FaGripHorizontal, FaSave } from "react-icons/fa";
 import { FaDownload } from "react-icons/fa6";
 import { HiMiniQueueList } from "react-icons/hi2";
 import { useProfile } from '../app/ProfileContext';
@@ -12,20 +12,44 @@ import { Separator } from "@chakra-ui/react/separator";
 import { PopoverArrow, PopoverBody, PopoverContent, PopoverRoot, PopoverTrigger } from "./ui/popover";
 import { SegmentedControl } from "./ui/segmented-control";
 import { HStack } from "@chakra-ui/react";
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import { PiColumnsPlusLeftBold, PiColumnsPlusRightBold, PiRowsPlusBottomBold, PiRowsPlusTopBold } from "react-icons/pi";
+import { Component } from "react";
+import { GrList, GrTextAlignFull } from "react-icons/gr";
+import { MdOutlineWork } from "react-icons/md";
+import { RiGraduationCapFill } from "react-icons/ri";
+
+async function downloadDivAsPDF() {
+  const element = document.getElementById('page-1');
+
+  if (element) {
+      const canvas = await html2canvas(element);
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'px',
+        format: [canvas.width, canvas.height]
+      });
+      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+      pdf.save('download.pdf');
+  } else {
+      console.error('Element not found!');
+  }
+}
 
 const LayoutButton: React.FC<{config: Config, setConfig: React.Dispatch<React.SetStateAction<Config>>}> = ({config, setConfig}) => {
   return (<div className="flex">
     <PopoverRoot positioning={{ placement: "bottom" }}>
       <PopoverTrigger asChild>
         <Button variant="plain" size="sm" color="white">
-          Layout
+          {config.layout === "SINGLE" ? <BsWindowFullscreen /> : <BsWindowSidebar />}
         </Button>
       </PopoverTrigger>
       <PopoverContent>
         <PopoverArrow />
         <PopoverBody>
           <SegmentedControl value={config.layout} onValueChange={({value}: {value: LayoutEnum}) => setConfig({layout: value}) } items={[
-            // "SINGLE" | "SPLIT"
             { value: "SINGLE", label: <HStack><BsWindowFullscreen /> Classic layout</HStack> },
             { value: "SPLIT", label: <HStack><BsWindowSidebar /> Split layout</HStack>}]} />
         </PopoverBody>
@@ -34,22 +58,22 @@ const LayoutButton: React.FC<{config: Config, setConfig: React.Dispatch<React.Se
   </div>)
 }
 
-const AddButton: React.FC<{ sectionName: string, onAdd: (t: SectionItem) => void, allowExpEdu?: boolean }> = ({ sectionName, onAdd, allowExpEdu = true }) => {
+const AddButton: React.FC<{ icon: Component, onAdd: (t: SectionItem) => void, allowExpEdu?: boolean }> = ({ icon, onAdd, allowExpEdu = true }) => {
   return (<div>
     <PopoverRoot positioning={{ placement: "bottom" }}>
       <PopoverTrigger asChild>
         <Button variant="plain" size="sm" color="white">
-          Add to {sectionName} section
+          {icon}
         </Button>
       </PopoverTrigger>
       <PopoverContent>
         <PopoverArrow />
         <PopoverBody>
-          {allowExpEdu && <Button value="add-experience" onClick={() => onAdd({experiences: []})}>Experience</Button>}
-          {allowExpEdu && <Button value="add-education" onClick={() => onAdd({course: []})}>Education</Button>}
-          <Button value="add-text" onClick={() => onAdd({type: "TEXT"})}>Text</Button>
-          <Button value="add-list" onClick={() => onAdd({type: "LIST"})}>List</Button>
-          <Button value="add-chips" onClick={() => onAdd({type: "CHIPS"})}>Chips</Button>
+          {allowExpEdu && <Button value="add-experience" onClick={() => onAdd({experiences: []})} title="Experience"><MdOutlineWork /></Button>}
+          {allowExpEdu && <Button value="add-education" onClick={() => onAdd({course: []})} title="Education"><RiGraduationCapFill /></Button>}
+          <Button value="add-text" onClick={() => onAdd({type: "TEXT"})} title="Text"><GrTextAlignFull/></Button>
+          <Button value="add-list" onClick={() => onAdd({type: "LIST"})} title="List"><GrList /></Button>
+          <Button value="add-chips" onClick={() => onAdd({type: "CHIPS"})} title="Chips"><FaGripHorizontal /></Button>
         </PopoverBody>
       </PopoverContent>
     </PopoverRoot>
@@ -69,15 +93,15 @@ const Header: React.FC<{}> = () => {
       <div className="flex flex-1 justify-center">
         <LayoutButton config={config} setConfig={setConfig} />
         <Separator orientation="vertical" />
-        <AddButton sectionName={config.layout === "SINGLE" ? "upper" : "left"} onAdd={(t) => {
+        <AddButton icon={config.layout === "SINGLE" ? <PiRowsPlusTopBold /> : <PiColumnsPlusLeftBold />} onAdd={(t) => {
           setProfile({...profile, section1: profile.section1 ? [...profile.section1, t] : [t]});
         }} allowExpEdu={false} />
-        <AddButton sectionName={config.layout === "SINGLE" ? "lower" : "right"} onAdd={(t) => {
+        <AddButton icon={config.layout === "SINGLE" ? <PiRowsPlusBottomBold /> : <PiColumnsPlusRightBold />} onAdd={(t) => {
           setProfile({...profile, section2: profile.section2 ? [...profile.section2, t]: [t]});
         }} />
       </div>
       <Button colorPalette="green" className="mx-3" onClick={saveProfileToLocalStorage} disabled={!unsavedChanges}><FaSave /></Button>
-      <Button colorPalette="orange" color="white"><FaDownload /> Download</Button>
+      <Button colorPalette="orange" color="white" onClick={downloadDivAsPDF}><FaDownload /> Download</Button>
     </div>
   </div>
 }
