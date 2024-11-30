@@ -1,13 +1,10 @@
-import Profile, { Experience, SectionItem } from "@/types/profile";
-import { TimelineConnector, TimelineContent, TimelineDescription, TimelineItem, TimelineRoot } from "@chakra-ui/react";
-import { MdMoveDown, MdMoveUp, MdPlaylistAdd, MdWork } from "react-icons/md";
+import { Experience, SectionItem } from "@/types/profile";
+import { TimelineConnector, TimelineContent, TimelineTitle, TimelineDescription, TimelineItem, TimelineRoot } from "@chakra-ui/react";
+import { MdWork } from "react-icons/md";
 import EditableText from "./EditableText";
 import { useProfile } from "@/app/ProfileContext";
 import PartHoverMenu from "./PartHoverMenu";
-import { IoCloseCircle } from "react-icons/io5";
 import InnerPartHoverMenu from "./InnerPartHoverMenu";
-
-
 
 function remover(item: SectionItem, index: number) {
   let sectionItem = item as Experience;
@@ -49,10 +46,10 @@ const ExperienceElement: React.FC<{ experience: Experience, section: "SECTION1" 
           <MdWork />
         </TimelineConnector>
         <TimelineContent className="pb-0">
+          <TimelineTitle className="flex">
+            <EditableText placeholder="Company" value={e.company} className="text-lg" onChange={eve => updateExperience(idx, {company: eve.target.value})} />
+          </TimelineTitle>
           <TimelineDescription className="flex flex-col">
-            <div className="flex">
-              <EditableText placeholder="Company" value={e.company} className="text-lg" onChange={eve => updateExperience(idx, {company: eve.target.value})} />
-            </div>
             <div className="flex">
               <EditableText placeholder="Role" value={e.role} onChange={eve => updateExperience(idx, {role: eve.target.value})} />
               <EditableText placeholder="Since - Until" value={e.timeline} className="w-1/4 text-right flex-initial" onChange={eve => updateExperience(idx, {timeline: eve.target.value})} />

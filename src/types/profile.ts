@@ -3,7 +3,6 @@ export interface Part {
   heading?: string,
   text?: string,
   list?: string[],
-  chips?: string[],
 }
 
 export interface Experience {

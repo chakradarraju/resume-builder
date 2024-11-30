@@ -13,7 +13,8 @@ import { BsWindowFullscreen, BsWindowSidebar } from "react-icons/bs";
 import { Separator } from "@chakra-ui/react/separator";
 import { Portal } from "@chakra-ui/react/portal";
 import { PopoverArrow, PopoverBody, PopoverContent, PopoverRoot, PopoverTrigger } from "./ui/popover";
-
+import { SegmentedControl } from "./ui/segmented-control";
+import { HStack } from "@chakra-ui/react"
 const LayoutButton: React.FC<{config: Config, setConfig: React.Dispatch<React.SetStateAction<Config>>}> = ({config, setConfig}) => {
   return (<div className="flex">
     <PopoverRoot positioning={{ placement: "bottom" }}>
@@ -25,8 +26,10 @@ const LayoutButton: React.FC<{config: Config, setConfig: React.Dispatch<React.Se
       <PopoverContent>
         <PopoverArrow />
         <PopoverBody>
-          <Button value="single-col" className={`${config.layout === "SINGLE"} ? 'bg-gray-100' : ''`} onClick={() => setConfig({layout: "SINGLE"})}><BsWindowFullscreen />Classic layout</Button>
-          <Button value="double-col" className={`${config.layout === "SPLIT"} ? 'bg-gray-100' : ''`} onClick={() => setConfig({layout: "SPLIT"})}><BsWindowSidebar />Split layout</Button>
+          <SegmentedControl defaultValue={config.layout} value={config.layout} onChange={(e) => { console.log('Setting layout', e.target.value); setConfig({layout: e.target.value})} } items={[
+            // "SINGLE" | "SPLIT"
+            { value: "SINGLE", label: <HStack><BsWindowFullscreen /> Classic layout</HStack> },
+            { value: "SPLIT", label: <HStack><BsWindowSidebar /> Split layout</HStack>}]} />
         </PopoverBody>
       </PopoverContent>
     </PopoverRoot>

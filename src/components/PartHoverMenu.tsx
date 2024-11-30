@@ -24,7 +24,7 @@ const PartHoverMenu: React.FC<{section: "SECTION1" | "SECTION2", sectionIndex: n
     setProfile(newProfile);
   }
 
-  return (<div className="absolute top-0 right-0 mt-2 mr-2 opacity-0 text-gray-500 group-hover:opacity-100">
+  return (<div className="absolute top-0 right-0 mt-2 mr-2 opacity-0 text-gray-500 group-hover:opacity-100 z-10">
     {sectionIndex !== 0 && <button className="inline-block mx-1" onClick={() => run((i) => swap(i, sectionIndex - 1))}>
       <MdMoveUp />
     </button>}
