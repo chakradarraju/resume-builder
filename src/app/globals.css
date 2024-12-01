@@ -23,3 +23,7 @@ body {
 [contenteditable] {
   outline: 0px solid transparent;
 }
+
+textarea {
+  field-sizing: content;
+}

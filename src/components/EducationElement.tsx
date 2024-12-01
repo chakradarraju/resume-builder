@@ -1,4 +1,4 @@
-import Profile, { Education, SectionItem } from "@/types/profile";
+import Profile, { Education, SectionEnum, SectionItem } from "@/types/profile";
 import EditableText from "./EditableText";
 import { useProfile } from "@/app/ProfileContext";
 import PartHoverMenu from "./PartHoverMenu";
@@ -19,7 +19,7 @@ function swapper(item: SectionItem, idx: number, targetIdx: number) {
   [sectionItem.course[idx], sectionItem.course[targetIdx]] = [sectionItem.course[targetIdx], sectionItem.course[idx]];
 }
 
-const EducationElement: React.FC<{ education: Education, section: "SECTION1" | "SECTION2", sectionIndex: number, id: string }> = ({ education, section, sectionIndex, id }) => {
+const EducationElement: React.FC<{ education: Education, section: SectionEnum, sectionIndex: number, id: string }> = ({ education, section, sectionIndex, id }) => {
   const { profile, setProfile } = useProfile();
   
   function updateEducation(courseIndex: number, update: object) {

@@ -1,9 +1,9 @@
 import { useProfile } from "@/app/ProfileContext";
-import Profile, { SectionItem } from "@/types/profile";
+import Profile, { SectionEnum, SectionItem } from "@/types/profile";
 import { IoCloseCircle } from "react-icons/io5";
 import { MdMoveDown, MdMoveUp } from "react-icons/md";
 
-const PartHoverMenu: React.FC<{section: "SECTION1" | "SECTION2", sectionIndex: number}> = ({section, sectionIndex}) => {
+const PartHoverMenu: React.FC<{section: SectionEnum, sectionIndex: number}> = ({section, sectionIndex}) => {
   const { profile, setProfile } = useProfile();
 
   const sectionLength = (section === "SECTION1" ? profile.section1?.length : profile.section2?.length) || 0;

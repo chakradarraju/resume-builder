@@ -1,5 +1,5 @@
 import ProfilePic from "./ProfilePic";
-import { SectionItem } from "@/types/profile";
+import { SectionEnum, SectionItem } from "@/types/profile";
 import EditableText from "./EditableText";
 import EducationElement from "@/components/EducationElement";
 import ExperienceElement from "@/components/ExperienceElement";
@@ -16,7 +16,7 @@ function isEducation(p: SectionItem): p is Education {
   return (p as Education).course !== undefined;
 }
 
-export function render(p: SectionItem, idx: number, section: "SECTION1" | "SECTION2") {
+export function render(p: SectionItem, idx: number, section: SectionEnum) {
   if (isExperience(p)) return <ExperienceElement key={idx} experience={p} section={section} sectionIndex={idx} id={`${section}-${idx}`} />;
   if (isEducation(p)) return <EducationElement key={idx} education={p} section={section} sectionIndex={idx} id={`${section}-${idx}`} />;
   return <GenericElement key={idx} part={p} section={section} sectionIndex={idx} id={`${section}-${idx}`} />;

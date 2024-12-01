@@ -1,5 +1,5 @@
 import { useProfile } from "@/app/ProfileContext";
-import Profile, { Part, SectionItem } from "@/types/profile";
+import Profile, { Part, SectionEnum, SectionItem } from "@/types/profile";
 import EditableText from "./EditableText";
 import PartHoverMenu from "./PartHoverMenu";
 import { Tag } from "./ui/tag";
@@ -24,7 +24,7 @@ function listItemSwapper(item: SectionItem, idx: number, targetIdx: number) {
   [sectionItem.list[idx], sectionItem.list[targetIdx]] = [sectionItem.list[targetIdx], sectionItem.list[idx]];
 }
 
-const GenericElement: React.FC<{ part: Part, section: "SECTION1" | "SECTION2", sectionIndex: number, id: string }> = ({ part, section, sectionIndex, id }) => {
+const GenericElement: React.FC<{ part: Part, section: SectionEnum, sectionIndex: number, id: string }> = ({ part, section, sectionIndex, id }) => {
   const { profile, setProfile } = useProfile();
 
   function updatePart(update: object) {

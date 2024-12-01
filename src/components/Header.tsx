@@ -13,7 +13,7 @@ import { PopoverArrow, PopoverBody, PopoverContent, PopoverRoot, PopoverTrigger 
 import { SegmentedControl } from "./ui/segmented-control";
 import { HStack } from "@chakra-ui/react";
 import { PiColumnsPlusLeftBold, PiColumnsPlusRightBold, PiRowsPlusBottomBold, PiRowsPlusTopBold } from "react-icons/pi";
-import { Component } from "react";
+import { Component, ReactNode } from "react";
 import { GrList, GrTextAlignFull } from "react-icons/gr";
 import { MdOutlineWork } from "react-icons/md";
 import { RiGraduationCapFill } from "react-icons/ri";
@@ -31,7 +31,7 @@ async function exportToPDF() {
       style: '@import url(https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap);',
       css: '/_next/static/css/app/layout.css?v=1733040129890',
       font: 'Nunito',
-      font_size: null
+      font_size: undefined
   });
 }
 
@@ -55,7 +55,7 @@ const LayoutButton: React.FC<{config: Config, setConfig: React.Dispatch<React.Se
   </div>)
 }
 
-const AddButton: React.FC<{ icon: Component, onAdd: (t: SectionItem) => void, allowExpEdu?: boolean }> = ({ icon, onAdd, allowExpEdu = true }) => {
+const AddButton: React.FC<{ icon: ReactNode, onAdd: (t: SectionItem) => void, allowExpEdu?: boolean }> = ({ icon, onAdd, allowExpEdu = true }) => {
   return (<div>
     <PopoverRoot positioning={{ placement: "bottom" }}>
       <PopoverTrigger asChild>

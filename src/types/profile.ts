@@ -35,6 +35,8 @@ export interface Profile {
   section2?: SectionItem[],
 }
 
+export type SectionEnum = "SECTION1" | "SECTION2";
+
 export type SectionItem = (Experience | Education | Part);
 
 export default Profile;

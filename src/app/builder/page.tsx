@@ -17,7 +17,7 @@ const Page: React.FC = () => {
   }, [setProfile]);
 
   return (<div className="w-full" id="page-container">
-    <div className="bg-white mx-auto w-[1000px] min-w-[1000px] min-h-[1400px] m-4 p-12 print:mx-0" id="page-1">
+    <div className="bg-white mx-auto w-[1000px] min-w-[1000px] min-h-[1400px] m-4 p-12 print:m-0" id="page-1">
       <ResumeLayout profile={profile} setProfile={setProfile} />
     </div>
   </div>)

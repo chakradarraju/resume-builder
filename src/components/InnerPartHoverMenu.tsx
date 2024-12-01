@@ -1,9 +1,9 @@
 import { useProfile } from "@/app/ProfileContext";
-import Profile, { SectionItem } from "@/types/profile";
+import Profile, { SectionEnum, SectionItem } from "@/types/profile";
 import { IoCloseCircle } from "react-icons/io5";
 import { MdMoveDown, MdMoveUp, MdPlaylistAdd } from "react-icons/md";
 
-const InnerPartHoverMenu: React.FC<{idx: number, len: number, section: "SECTION1" | "SECTION2", sectionIndex: number, adder: (i: SectionItem) => void, remover: (i: SectionItem, idx: number) => void, swapper: (i: SectionItem, idx: number, targetIdx: number) => void}> = ({idx, len, section, sectionIndex, adder, remover, swapper}) => {
+const InnerPartHoverMenu: React.FC<{idx: number, len: number, section: SectionEnum, sectionIndex: number, adder: (i: SectionItem) => void, remover: (i: SectionItem, idx: number) => void, swapper: (i: SectionItem, idx: number, targetIdx: number) => void}> = ({idx, len, section, sectionIndex, adder, remover, swapper}) => {
   const { profile, setProfile } = useProfile();
 
   function run(op: (i: SectionItem) => void) {

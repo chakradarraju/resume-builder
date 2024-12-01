@@ -1,4 +1,4 @@
-import { Experience, SectionItem } from "@/types/profile";
+import { Experience, SectionEnum, SectionItem } from "@/types/profile";
 import { TimelineConnector, TimelineContent, TimelineTitle, TimelineDescription, TimelineItem, TimelineRoot } from "@chakra-ui/react";
 import { MdWork } from "react-icons/md";
 import EditableText from "./EditableText";
@@ -21,7 +21,7 @@ function swapper(item: SectionItem, idx: number, targetIdx: number) {
   [sectionItem.experiences[idx], sectionItem.experiences[targetIdx]] = [sectionItem.experiences[targetIdx], sectionItem.experiences[idx]];
 }
 
-const ExperienceElement: React.FC<{ experience: Experience, section: "SECTION1" | "SECTION2", sectionIndex: number, id: string }> = ({experience, section, sectionIndex, id}) => {
+const ExperienceElement: React.FC<{ experience: Experience, section: SectionEnum, sectionIndex: number, id: string }> = ({experience, section, sectionIndex, id}) => {
   const { profile, setProfile } = useProfile();
 
   function updateExperience(experienceIndex: number, update: object) {
