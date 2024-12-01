@@ -4,17 +4,9 @@ import EditableText from "./EditableText";
 import EducationElement from "@/components/EducationElement";
 import ExperienceElement from "@/components/ExperienceElement";
 import GenericElement from "@/components/GenericElement";
-import {Experience, Education} from "@/types/profile";
 import ProfileEditor from "@/types/profileEditor";
 import { useConfig } from "@/app/ConfigContext";
-
-function isExperience(p: SectionItem): p is Experience {
-  return (p as Experience).experiences !== undefined;
-}
-
-function isEducation(p: SectionItem): p is Education {
-  return (p as Education).course !== undefined;
-}
+import { isEducation, isExperience } from "@/types/typeChecks";
 
 export function render(p: SectionItem, idx: number, section: SectionEnum) {
   if (isExperience(p)) return <ExperienceElement key={idx} experience={p} section={section} sectionIndex={idx} id={`${section}-${idx}`} />;

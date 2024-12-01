@@ -6,7 +6,7 @@ import { FaDownload } from "react-icons/fa6";
 import { HiMiniQueueList } from "react-icons/hi2";
 import { useProfile } from '../app/ProfileContext';
 import { Config, LayoutEnum, useConfig } from "@/app/ConfigContext";
-import { SectionItem } from "@/types/profile";
+import { EMPTY_PROFILE, SectionItem } from "@/types/profile";
 import { BsWindowFullscreen, BsWindowSidebar } from "react-icons/bs";
 import { Separator } from "@chakra-ui/react/separator";
 import { PopoverArrow, PopoverBody, PopoverContent, PopoverRoot, PopoverTrigger } from "./ui/popover";
@@ -15,7 +15,7 @@ import { HStack } from "@chakra-ui/react";
 import { PiColumnsPlusLeftBold, PiColumnsPlusRightBold, PiRowsPlusBottomBold, PiRowsPlusTopBold } from "react-icons/pi";
 import { Component, ReactNode, useEffect, useRef, useState } from "react";
 import { GrList, GrTextAlignFull } from "react-icons/gr";
-import { MdOutlineWork } from "react-icons/md";
+import { MdOutlineFiberNew, MdOutlineWork } from "react-icons/md";
 import { RiGraduationCapFill } from "react-icons/ri";
 import type { default as PrintJS } from 'print-js';
 
@@ -110,8 +110,9 @@ const Header: React.FC<{}> = () => {
           setProfile({...profile, section2: profile.section2 ? [...profile.section2, t]: [t]});
         }} />
       </div>
-      <Button colorPalette="green" className="mx-3" onClick={saveProfileToLocalStorage} disabled={!unsavedChanges}><FaSave /></Button>
-      <Button colorPalette="orange" color="white" onClick={exportToPDF}><FaDownload /> Download</Button>
+      <Button colorPalette="red" className="mx-2" onClick={() => setProfile(EMPTY_PROFILE)}><MdOutlineFiberNew /></Button>
+      <Button colorPalette="green" className="mx-2" onClick={saveProfileToLocalStorage} disabled={!unsavedChanges}><FaSave /></Button>
+      <Button colorPalette="orange" className="mx-2" color="white" onClick={exportToPDF}><FaDownload /> Download</Button>
     </div>
   </div>
 }

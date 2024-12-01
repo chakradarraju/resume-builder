@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState, useCallback, useMemo, useContext } from 'react';
-import Profile from '@/types/profile';
+import Profile, { EMPTY_PROFILE } from '@/types/profile';
 
 interface ProfileContextType {
   profile: Profile;
@@ -11,11 +11,7 @@ interface ProfileContextType {
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
 export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [profile, setProfile] = useState<Profile>({
-    name: '',
-    role: '',
-    picture: '',
-  });
+  const [profile, setProfile] = useState<Profile>(EMPTY_PROFILE);
 
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(null);

@@ -31,9 +31,17 @@ export interface Profile {
   name?: string,
   role?: string,
   picture?: string,
-  section1?: SectionItem[],
-  section2?: SectionItem[],
+  section1: SectionItem[],
+  section2: SectionItem[],
 }
+
+export const EMPTY_PROFILE: Profile = {
+  name: '',
+  role: '',
+  picture: '',
+  section1: [{type: "TEXT", heading: 'About me'}, {type: "LIST", heading: 'Link'}],
+  section2: [{experiences:[]}, {course:[]}, {type: "LIST", heading: 'Skills'}]
+};
 
 export type SectionEnum = "SECTION1" | "SECTION2";
 
