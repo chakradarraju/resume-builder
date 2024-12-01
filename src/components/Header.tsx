@@ -31,7 +31,7 @@ async function exportToPDF() {
       style: '@import url(https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap);',
       css: '/_next/static/css/app/layout.css?v=1733040129890',
       font: 'Nunito',
-      font_size: undefined
+      font_size: ''
   });
 }
 
