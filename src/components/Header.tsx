@@ -13,27 +13,13 @@ import { PopoverArrow, PopoverBody, PopoverContent, PopoverRoot, PopoverTrigger 
 import { SegmentedControl } from "./ui/segmented-control";
 import { HStack } from "@chakra-ui/react";
 import { PiColumnsPlusLeftBold, PiColumnsPlusRightBold, PiRowsPlusBottomBold, PiRowsPlusTopBold } from "react-icons/pi";
-import { Component, ReactNode } from "react";
+import { Component, ReactNode, useEffect, useRef, useState } from "react";
 import { GrList, GrTextAlignFull } from "react-icons/gr";
 import { MdOutlineWork } from "react-icons/md";
 import { RiGraduationCapFill } from "react-icons/ri";
+import type { default as PrintJS } from 'print-js';
 
-
-async function exportToPDF() {
-  const printJS = await import('print-js');
-  printJS.default({
-      printable: 'page-1',
-      maxWidth: 1000,
-      type: 'html',
-      targetStyles: ['*'],
-      showModal: false,
-      honorMarginPadding: false,
-      style: '@import url(https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap);',
-      css: '/_next/static/css/app/layout.css?v=1733040129890',
-      font: 'Nunito',
-      font_size: ''
-  });
-}
+var printJS: (typeof PrintJS | null) = null;
 
 const LayoutButton: React.FC<{config: Config, setConfig: React.Dispatch<React.SetStateAction<Config>>}> = ({config, setConfig}) => {
   return (<div className="flex">
@@ -79,7 +65,34 @@ const AddButton: React.FC<{ icon: ReactNode, onAdd: (t: SectionItem) => void, al
 
 const Header: React.FC<{}> = () => {
   const { profile, setProfile, unsavedChanges, saveProfileToLocalStorage } = useProfile();
-  const { config, setConfig } = useConfig();
+  const { config, setConfig, printMode, setPrintMode } = useConfig();
+
+  async function exportToPDF() {
+    if (!printJS) {
+      const module = await import('print-js');
+      printJS = module.default;
+    }
+    setPrintMode(true);
+    console.log('Setting print mode true');
+  }
+
+  useEffect(() => {
+    if (printMode && printJS) {
+      printJS({
+          printable: 'page-1',
+          maxWidth: 1000,
+          type: 'html',
+          targetStyles: ['*'],
+          showModal: false,
+          honorMarginPadding: false,
+          style: '@import url(https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap);',
+          css: '/_next/static/css/app/layout.css?v=1733040129890',
+          font: 'Nunito',
+          font_size: '',
+      });
+      setPrintMode(false);
+    }
+  }, [printMode]);
 
   return <div className="w-full flex fixed z-[200]">
     <div className="p-4 bg-black text-white rounded-xl flex m-3 grow">

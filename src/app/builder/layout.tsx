@@ -6,7 +6,7 @@ const Layout: React.FC<{children: React.ReactNode}> = ({ children }) => {
 
   return (<div className='flex flex-col w-full h-full bg-gradient-to-t from-blue-500/50 to-blue-500 absolute overflow-scroll text-black'>
     <Header />
-    <div className='grow mt-20 my-5'>
+    <div className='grow'>
       {children}
     </div>
   </div>);
