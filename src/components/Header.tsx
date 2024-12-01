@@ -12,30 +12,27 @@ import { Separator } from "@chakra-ui/react/separator";
 import { PopoverArrow, PopoverBody, PopoverContent, PopoverRoot, PopoverTrigger } from "./ui/popover";
 import { SegmentedControl } from "./ui/segmented-control";
 import { HStack } from "@chakra-ui/react";
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 import { PiColumnsPlusLeftBold, PiColumnsPlusRightBold, PiRowsPlusBottomBold, PiRowsPlusTopBold } from "react-icons/pi";
 import { Component } from "react";
 import { GrList, GrTextAlignFull } from "react-icons/gr";
 import { MdOutlineWork } from "react-icons/md";
 import { RiGraduationCapFill } from "react-icons/ri";
 
-async function downloadDivAsPDF() {
-  const element = document.getElementById('page-1');
 
-  if (element) {
-      const canvas = await html2canvas(element);
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'px',
-        format: [canvas.width, canvas.height]
-      });
-      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
-      pdf.save('download.pdf');
-  } else {
-      console.error('Element not found!');
-  }
+async function exportToPDF() {
+  const printJS = await import('print-js');
+  printJS.default({
+      printable: 'page-1',
+      maxWidth: 1000,
+      type: 'html',
+      targetStyles: ['*'],
+      showModal: false,
+      honorMarginPadding: false,
+      style: '@import url(https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap);',
+      css: '/_next/static/css/app/layout.css?v=1733040129890',
+      font: 'Nunito',
+      font_size: null
+  });
 }
 
 const LayoutButton: React.FC<{config: Config, setConfig: React.Dispatch<React.SetStateAction<Config>>}> = ({config, setConfig}) => {
@@ -101,7 +98,7 @@ const Header: React.FC<{}> = () => {
         }} />
       </div>
       <Button colorPalette="green" className="mx-3" onClick={saveProfileToLocalStorage} disabled={!unsavedChanges}><FaSave /></Button>
-      <Button colorPalette="orange" color="white" onClick={downloadDivAsPDF}><FaDownload /> Download</Button>
+      <Button colorPalette="orange" color="white" onClick={exportToPDF}><FaDownload /> Download</Button>
     </div>
   </div>
 }

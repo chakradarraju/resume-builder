@@ -3,9 +3,9 @@ import { ChangeEventHandler } from "react";
 
 const EDITABLE_TEXT_CLASS = "border-none focus:outline-none focus-within:bg-gray-100 flex-1 p-0 "
 
-const EditableText: React.FC<{placeholder?: string, className?: string, value?: string, multiline?: boolean, onChange?: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>}> = ({placeholder, className, value, multiline, onChange}) => {
-  if (multiline) return <Textarea placeholder={placeholder} className={`resize-none hover:resize-y ${EDITABLE_TEXT_CLASS} ${className || ''}`} value={value || ''} onChange={onChange} />
-  return <Input placeholder={placeholder} className={`${EDITABLE_TEXT_CLASS} ${className || ''}`} value={value || ''} onChange={onChange} />
+const EditableText: React.FC<{placeholder?: string, className?: string, value?: string, multiline?: boolean, onChange?: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>, style?: object}> = ({placeholder, className, value, multiline, onChange, style}) => {
+  if (multiline) return <Textarea placeholder={placeholder} className={`resize-none hover:resize-y ${EDITABLE_TEXT_CLASS} ${className || ''}`} style={{...style, fieldSizing: 'content'}} value={value || ''} onChange={onChange} />
+  return <Input placeholder={placeholder} className={`${EDITABLE_TEXT_CLASS} ${className || ''}`} value={value || ''} onChange={onChange} style={style} />
 }
 
 export default EditableText;

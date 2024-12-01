@@ -28,8 +28,8 @@ const ResumeLayout: React.FC<ProfileEditor> = ({ profile, setProfile }) => {
   return (<div className="flex flex-col">
     <div className="flex m-4">
       <ProfilePic profile={profile} setProfile={setProfile} />
-      <div className="p-8 my-auto">
-        <EditableText placeholder="Your Name" className="text-5xl text-blue-400 font-bold h-16" value={profile.name} onChange={e => setProfile({...profile, name: e.target.value})} />
+      <div className="p-8 my-auto w-3/4">
+        <EditableText placeholder="Your Name" className="text-5xl print:text-5xl text-blue-400 font-bold h-16" style={{textSize: '48px'}} value={profile.name} onChange={e => setProfile({...profile, name: e.target.value})} />
         <EditableText placeholder="Your designation" className="uppercase font-bold" value={profile.role} onChange={e => setProfile({...profile, role: e.target.value })} />
       </div>
     </div>
