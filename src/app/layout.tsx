@@ -4,7 +4,6 @@ import { nunito } from '@/ui/fonts';
 import "./globals.css";
 import { Provider } from "@/components/ui/provider"
 import { ProfileProvider } from './ProfileContext';
-import { ColorModeProvider } from '@/components/ui/color-mode';
 import { ConfigProvider } from './ConfigContext';
 
 export default function RootLayout({ children }: Readonly<{children: React.ReactNode}>) {
@@ -14,12 +13,10 @@ export default function RootLayout({ children }: Readonly<{children: React.React
         <title>Resume builder</title>
       </head>
       <body className={`${nunito.className} antialiased h-full min-h-screen`}>
-        <Provider>
+        <Provider forcedTheme='light'>
           <ProfileProvider>
             <ConfigProvider>
-              <ColorModeProvider forcedTheme="light">
-                {children}              
-              </ColorModeProvider>
+              {children}              
             </ConfigProvider>
           </ProfileProvider>       
         </Provider>
