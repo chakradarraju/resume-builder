@@ -38,7 +38,7 @@ const ExperienceElement: React.FC<{ experience: Experience, section: SectionEnum
 
   if (experience.experiences.length === 0) experience.experiences.push({});
 
-  return (<div className="card relative group/i py-2 rounded-lg">
+  return (<div className="card relative group/i py-2 rounded-lg break-inside-avoid-page">
     <PartHoverMenu section={section} sectionIndex={sectionIndex} />
     <div className="text-2xl">Experiences</div>
     <TimelineRoot variant="outline">

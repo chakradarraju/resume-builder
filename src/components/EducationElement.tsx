@@ -34,7 +34,7 @@ const EducationElement: React.FC<{ education: Education, section: SectionEnum, s
 
   if (education.course.length === 0) education.course.push({});
 
-  return <div className="group/i relative">
+  return <div className="group/i relative break-inside-avoid-page">
     <PartHoverMenu section={section} sectionIndex={sectionIndex} />
     <div className="text-2xl">Education</div>
     {education.course?.map((e, idx) => <div key={idx} className="group/ii relative">

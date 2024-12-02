@@ -51,7 +51,7 @@ const GenericElement: React.FC<{ part: Part, section: SectionEnum, sectionIndex:
 
   if ((part.type === "LIST" || part.type === "CHIPS") && !part.list) part.list = [''];
 
-  return (<div className="relative group/i">
+  return (<div className="relative group/i break-inside-avoid-page">
     <PartHoverMenu section={section} sectionIndex={sectionIndex} />
     <EditableText placeholder="Heading" value={part.heading} className="text-2xl" onChange={ele => updatePart({heading: ele.target.value})} />
     {part.type === "TEXT" && <EditableText placeholder="Description" multiline value={part.text} onChange={ele => updatePart({text: ele.target.value})} />}
