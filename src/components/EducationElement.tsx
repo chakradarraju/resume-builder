@@ -6,12 +6,12 @@ import InnerPartHoverMenu from "./InnerPartHoverMenu";
 
 function remover(item: SectionItem, index: number) {
   let sectionItem = item as Education;
-  sectionItem.course = sectionItem.course.splice(index, 1);
+  sectionItem.course.splice(index, 1);
 }
 
-function adder(item: SectionItem) {
+function adder(item: SectionItem, index: number) {
   let sectionItem = item as Education;
-  sectionItem.course.push({});
+  sectionItem.course.splice(index + 1, 0, {});
 }
 
 function swapper(item: SectionItem, idx: number, targetIdx: number) {
@@ -34,17 +34,17 @@ const EducationElement: React.FC<{ education: Education, section: SectionEnum, s
 
   if (education.course.length === 0) education.course.push({});
 
-  return <div className="group relative">
+  return <div className="group/i relative">
     <PartHoverMenu section={section} sectionIndex={sectionIndex} />
     <div className="text-2xl">Education</div>
-    {education.course?.map((e, idx) => <div key={idx} className="group relative">
+    {education.course?.map((e, idx) => <div key={idx} className="group/ii relative">
       <InnerPartHoverMenu section={section} sectionIndex={sectionIndex} idx={idx} len={education.course.length} adder={adder} remover={remover} swapper={swapper}/>
       <div className="flex">
-        <EditableText placeholder="Institute" value={e.school} className="text-lg" onChange={eve => updateEducation(idx, {school: eve.target.value})} />
+        <EditableText placeholder="Institute" value={e.school} className="text-lg h-8" onChange={eve => updateEducation(idx, {school: eve.target.value})} />
       </div>
       <div className="flex">
-        <EditableText placeholder="Degree" value={e.degree} onChange={eve => updateEducation(idx, {degree: eve.target.value})} />
-        <EditableText placeholder="Since - Until" value={e.timeline} className="w-1/4 text-right flex-initial" onChange={eve => updateEducation(idx, {timeline: eve.target.value})} />
+        <EditableText placeholder="Degree" value={e.degree} className="h-6" onChange={eve => updateEducation(idx, {degree: eve.target.value})} />
+        <EditableText placeholder="Since - Until" value={e.timeline} className="w-1/4 h-6 text-right flex-initial" onChange={eve => updateEducation(idx, {timeline: eve.target.value})} />
       </div>
     </div>)}
   </div>;

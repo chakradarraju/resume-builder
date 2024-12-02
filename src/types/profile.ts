@@ -39,7 +39,7 @@ export const EMPTY_PROFILE: Profile = {
   name: '',
   role: '',
   picture: '',
-  section1: [{type: "TEXT", heading: 'About me'}, {type: "LIST", heading: 'Link'}],
+  section1: [{type: "TEXT", heading: 'About me'}, {type: "LIST", heading: 'Contacts'}],
   section2: [{experiences:[]}, {course:[]}, {type: "LIST", heading: 'Skills'}]
 };
 

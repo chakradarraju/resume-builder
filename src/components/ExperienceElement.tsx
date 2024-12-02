@@ -1,19 +1,21 @@
 import { Experience, SectionEnum, SectionItem } from "@/types/profile";
-import { TimelineConnector, TimelineContent, TimelineTitle, TimelineDescription, TimelineItem, TimelineRoot } from "@chakra-ui/react";
+import { TimelineConnector, TimelineContent, TimelineDescription, TimelineItem, TimelineRoot, TimelineTitle } from "./ui/timeline";
 import { MdWork } from "react-icons/md";
 import EditableText from "./EditableText";
 import { useProfile } from "@/app/ProfileContext";
 import PartHoverMenu from "./PartHoverMenu";
 import InnerPartHoverMenu from "./InnerPartHoverMenu";
+import { LuCheck, LuPackage, LuShip } from "react-icons/lu";
+import { Text } from "@chakra-ui/react"
 
 function remover(item: SectionItem, index: number) {
   let sectionItem = item as Experience;
-  sectionItem.experiences = sectionItem.experiences.splice(index, 1);
+  sectionItem.experiences.splice(index, 1);
 }
 
-function adder(item: SectionItem) {
+function adder(item: SectionItem, index: number) {
   let sectionItem = item as Experience;
-  sectionItem.experiences.push({});
+  sectionItem.experiences.splice(index + 1, 0, {});
 }
 
 function swapper(item: SectionItem, idx: number, targetIdx: number) {
@@ -36,26 +38,26 @@ const ExperienceElement: React.FC<{ experience: Experience, section: SectionEnum
 
   if (experience.experiences.length === 0) experience.experiences.push({});
 
-  return (<div className="card relative group py-2 rounded-lg">
+  return (<div className="card relative group/i py-2 rounded-lg">
     <PartHoverMenu section={section} sectionIndex={sectionIndex} />
     <div className="text-2xl">Experiences</div>
-    <TimelineRoot>
-      {experience.experiences.map((e, idx) => <TimelineItem key={idx} className="relative group">
+    <TimelineRoot variant="outline">
+      {experience.experiences.map((e, idx) => <TimelineItem key={idx} className="relative group/ii">
         <InnerPartHoverMenu section={section} sectionIndex={sectionIndex} idx={idx} len={experience.experiences.length} adder={adder} remover={remover} swapper={swapper}/>
         <TimelineConnector>
           <MdWork />
         </TimelineConnector>
-        <TimelineContent className="pb-0 gap-0">
-          <TimelineTitle className="flex">
-            <EditableText placeholder="Company" value={e.company} className="text-lg" onChange={eve => updateExperience(idx, {company: eve.target.value})} />
+        <TimelineContent className="pb-0 gap-0 -m-1">
+          <TimelineTitle className="flex text-blue-400">
+            <EditableText placeholder="Company" value={e.company} className="text-lg leading-none h-8" onChange={eve => updateExperience(idx, {company: eve.target.value})} />
           </TimelineTitle>
           <TimelineDescription className="flex flex-col">
             <div className="flex">
-              <EditableText placeholder="Role" value={e.role} onChange={eve => updateExperience(idx, {role: eve.target.value})} />
-              <EditableText placeholder="Since - Until" value={e.timeline} className="w-1/4 text-right flex-initial" onChange={eve => updateExperience(idx, {timeline: eve.target.value})} />
+              <EditableText placeholder="Role" value={e.role} className="h-6" onChange={eve => updateExperience(idx, {role: eve.target.value})} />
+              <EditableText placeholder="Since - Until" value={e.timeline} className="w-1/4 text-right flex-initial h-6" onChange={eve => updateExperience(idx, {timeline: eve.target.value})} />
             </div>
             <div>
-              <EditableText placeholder="Description" value={e.text} multiline onChange={eve => updateExperience(idx, {text: eve.target.value})} />
+              <EditableText placeholder="Description" value={e.text} multiline className="py-2" onChange={eve => updateExperience(idx, {text: eve.target.value})} />
             </div>
           </TimelineDescription>
         </TimelineContent>

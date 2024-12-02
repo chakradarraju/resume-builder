@@ -7,6 +7,9 @@ import GenericElement from "@/components/GenericElement";
 import ProfileEditor from "@/types/profileEditor";
 import { useConfig } from "@/app/ConfigContext";
 import { isEducation, isExperience } from "@/types/typeChecks";
+import { TimelineConnector, TimelineContent, TimelineDescription, TimelineItem, TimelineRoot, TimelineTitle } from "./ui/timeline";
+import { LuCheck, LuPackage, LuShip } from "react-icons/lu";
+import { Text } from "@chakra-ui/react";
 
 export function render(p: SectionItem, idx: number, section: SectionEnum) {
   if (isExperience(p)) return <ExperienceElement key={idx} experience={p} section={section} sectionIndex={idx} id={`${section}-${idx}`} />;
@@ -31,7 +34,7 @@ const ResumeLayout: React.FC<ProfileEditor> = ({ profile, setProfile }) => {
       </div>
       <div className={`${config.layout === "SPLIT" ? 'w-3/4' : ''}`}>
         {profile.section2?.map((e, idx) => render(e, idx, "SECTION2"))}
-      </div>
+      </div> 
     </div>
   </div>);
 }
