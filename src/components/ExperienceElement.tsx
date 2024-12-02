@@ -48,8 +48,8 @@ const ExperienceElement: React.FC<{ experience: Experience, section: SectionEnum
           <MdWork />
         </TimelineConnector>
         <TimelineContent className="pb-0 gap-0 -m-1">
-          <TimelineTitle className="flex text-blue-400">
-            <EditableText placeholder="Company" value={e.company} className="text-lg leading-none h-8" onChange={eve => updateExperience(idx, {company: eve.target.value})} />
+          <TimelineTitle className="flex">
+            <EditableText placeholder="Company" value={e.company} className="text-lg text-blue-400 font-bold leading-none h-8" onChange={eve => updateExperience(idx, {company: eve.target.value})} />
           </TimelineTitle>
           <TimelineDescription className="flex flex-col">
             <div className="flex">

@@ -56,7 +56,7 @@ const GenericElement: React.FC<{ part: Part, section: SectionEnum, sectionIndex:
     <EditableText placeholder="Heading" value={part.heading} className="text-2xl" onChange={ele => updatePart({heading: ele.target.value})} />
     {part.type === "TEXT" && <EditableText placeholder="Description" multiline value={part.text} onChange={ele => updatePart({text: ele.target.value})} />}
     {part.type === "LIST" && <ul className="list-disc">
-      {part.list?.map((i, idx) => <li key={idx} className="relative group/ii">
+      {part.list?.map((i, idx) => <li key={idx} className="relative group/ii ml-6">
         <InnerPartHoverMenu section={section} sectionIndex={sectionIndex} idx={idx} len={part.list?.length || 0} adder={listItemAdder} remover={listItemRemover} swapper={listItemSwapper}/>
         <EditableText placeholder="..." value={i} className="h-6" onChange={ele => updateList(idx, ele.target.value)} />
       </li>)}
