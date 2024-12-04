@@ -5,11 +5,23 @@ import { useEffect } from "react";
 import { useProfile } from '../ProfileContext';
 import { useConfig } from "../ConfigContext";
 import Profile from "@/types/profile";
-import { isEducation, isExperience, isPart } from "@/types/typeChecks";
+import mixpanel from "mixpanel-browser";
 
 const Page: React.FC = () => {
   const {profile, setProfile} = useProfile();
   const {printMode} = useConfig();
+
+  useEffect(() => {
+    mixpanel.init("f7fb8a723ec41c96963a52173e0bef49", {
+      debug: true,
+      track_pageview: true,
+      ignore_dnt: true,
+      record_sessions_percent: 100,
+      persistence: "localStorage",
+      api_host: 'https://api-in.mixpanel.com',
+    });
+    mixpanel.start_session_recording();
+  }, []);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && profile === null) {
@@ -21,7 +33,7 @@ const Page: React.FC = () => {
   }, [profile, setProfile]);
 
   return (<div className="w-full" id="page-container">
-    <div className={`bg-white w-[1000px] min-w-[1000px] min-h-[1400px] p-12 ${printMode ? 'm-0' : 'mx-auto mt-24 mb-4'}`} id="page-1">
+    <div className={`bg-white w-[1000px] min-w-[1000px] min-h-[1400px] p-12 print:p-2 ${printMode ? 'm-0' : 'mx-auto mt-24 mb-4'}`} id="page-1">
       <ResumeLayout profile={profile} setProfile={setProfile} />
     </div>
   </div>)

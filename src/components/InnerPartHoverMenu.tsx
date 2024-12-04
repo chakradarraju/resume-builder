@@ -8,7 +8,6 @@ const InnerPartHoverMenu: React.FC<{idx: number, len: number, section: SectionEn
   const { profile, setProfile } = useProfile();
 
   function run(op: (i: SectionItem) => void) {
-    console.log('Running op', op);
     let newProfile = {...profile};
     let sectionToUpdate = section === "SECTION1" ? newProfile.section1 : newProfile.section2;
     if (!sectionToUpdate) return;
@@ -26,7 +25,7 @@ const InnerPartHoverMenu: React.FC<{idx: number, len: number, section: SectionEn
     <button onClick={() => run((i) => adder(i, idx))}>
       <MdPlaylistAdd />
     </button>
-    <button onClick={() => { console.log('clicked on close'); run((i) => remover(i, idx)); } }>
+    <button onClick={() => run((i) => remover(i, idx))}>
       <IoCloseCircle />
     </button>
   </div>)
