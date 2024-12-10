@@ -5,7 +5,7 @@ import "./globals.css";
 import { Provider } from "@/components/ui/provider"
 import { ProfileProvider } from './ProfileContext';
 import { ConfigProvider } from './ConfigContext';
-import Script from 'next/script';
+import { SessionProvider } from 'next-auth/react';
 
 export default function RootLayout({ children }: Readonly<{children: React.ReactNode}>) {
   return (
@@ -17,11 +17,12 @@ export default function RootLayout({ children }: Readonly<{children: React.React
         <Provider forcedTheme='light'>
           <ProfileProvider>
             <ConfigProvider>
-              {children}              
+              <SessionProvider>
+                {children}       
+              </SessionProvider>       
             </ConfigProvider>
           </ProfileProvider>       
         </Provider>
-        <Script src="/supportBot.js" strategy='afterInteractive' />
       </body>
     </html>
   );

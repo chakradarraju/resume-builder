@@ -2,33 +2,32 @@ import { createContext, useContext, useMemo, useState } from "react";
 
 export type LayoutEnum = ("SINGLE" | "SPLIT")
 
-export interface Config {
-  layout: LayoutEnum,
-}
-
 interface ConfigContextType {
-  config: Config;
-  setConfig: React.Dispatch<React.SetStateAction<Config>>;
+  layout: LayoutEnum;
+  setLayout: React.Dispatch<React.SetStateAction<LayoutEnum>>;
   printMode: boolean,
   setPrintMode: React.Dispatch<React.SetStateAction<boolean>>;
+  creditsRemaining: number,
+  setCreditsRemaining: React.Dispatch<React.SetStateAction<number>>
 }
 
 const ConfigContext = createContext<ConfigContextType | undefined>(undefined);
 
 export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [config, setConfig] = useState<Config>({
-    layout: "SPLIT",
-  });
+  const [layout, setLayout] = useState<LayoutEnum>("SPLIT");
   const [printMode, setPrintMode] = useState<boolean>(false);
+  const [creditsRemaining, setCreditsRemaining] = useState<number>(0);
 
   const value = useMemo(
     () => ({
-      config,
-      setConfig,
+      layout,
+      setLayout,
+      creditsRemaining,
+      setCreditsRemaining,
       printMode,
       setPrintMode
     }),
-    [config, printMode]
+    [layout, printMode, creditsRemaining]
   );
 
   return <ConfigContext.Provider value={value}>{children}</ConfigContext.Provider>;

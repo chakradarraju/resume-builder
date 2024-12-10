@@ -3,6 +3,7 @@ import EditableText from "./EditableText";
 import { useProfile } from "@/app/ProfileContext";
 import PartHoverMenu from "./PartHoverMenu";
 import InnerPartHoverMenu from "./InnerPartHoverMenu";
+import { fillBullet } from "@/lib/uiutils/fillBullet";
 
 function remover(item: SectionItem, index: number) {
   let sectionItem = item as Education;
@@ -42,9 +43,12 @@ const EducationElement: React.FC<{ education: Education, section: SectionEnum, s
       <div className="flex">
         <EditableText placeholder="Institute" value={e.school} className="text-lg h-8" onChange={eve => updateEducation(idx, {school: eve.target.value})} />
       </div>
-      <div className="flex">
+      <div className={`flex ${e.degree || e.timeline ? '' : 'hidden group-hover/i:flex transition-all'}`}>
         <EditableText placeholder="Degree" value={e.degree} className="h-6" onChange={eve => updateEducation(idx, {degree: eve.target.value})} />
         <EditableText placeholder="Since - Until" value={e.timeline} className="w-1/4 h-6 text-right flex-initial" onChange={eve => updateEducation(idx, {timeline: eve.target.value})} />
+      </div>
+      <div className={`${e.text ? '' : 'hidden group-hover/i:flex'}`}>
+        <EditableText placeholder="Description" value={e.text} multiline className="py-2" onChange={eve => updateEducation(idx, {text: fillBullet(eve.target.value)})} />
       </div>
     </div>)}
   </div>;

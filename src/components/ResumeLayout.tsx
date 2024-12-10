@@ -7,9 +7,6 @@ import GenericElement from "@/components/GenericElement";
 import ProfileEditor from "@/types/profileEditor";
 import { useConfig } from "@/app/ConfigContext";
 import { isEducation, isExperience } from "@/types/typeChecks";
-import { TimelineConnector, TimelineContent, TimelineDescription, TimelineItem, TimelineRoot, TimelineTitle } from "./ui/timeline";
-import { LuCheck, LuPackage, LuShip } from "react-icons/lu";
-import { Text } from "@chakra-ui/react";
 
 export function render(p: SectionItem, idx: number, section: SectionEnum) {
   if (isExperience(p)) return <ExperienceElement key={idx} experience={p} section={section} sectionIndex={idx} id={`${section}-${idx}`} />;
@@ -18,9 +15,10 @@ export function render(p: SectionItem, idx: number, section: SectionEnum) {
 }
 
 const ResumeLayout: React.FC<ProfileEditor> = ({ profile, setProfile }) => {
-  const { config, setConfig } = useConfig();
+  const { layout, printMode, creditsRemaining } = useConfig();
 
-  return (<div className="flex flex-col">
+  return (<div className="flex flex-col relative">
+    {printMode && creditsRemaining === 0 && <span className="absolute top-0 right-0">Resume generated using <a className="underline text-blue-500" href="https://www.resumesgenie.com/">ResumesGenie</a></span>}
     <div className="flex mx-4">
       <ProfilePic profile={profile} setProfile={setProfile} />
       <div className="px-8 my-auto w-3/4">
@@ -28,14 +26,15 @@ const ResumeLayout: React.FC<ProfileEditor> = ({ profile, setProfile }) => {
         <EditableText placeholder="Your designation" className="uppercase font-bold" value={profile.role} onChange={e => setProfile({...profile, role: e.target.value })} />
       </div>
     </div>
-    <div className={`flex m-4 ${config.layout === "SINGLE" ? 'flex-col': ''}`}>
-      <div className={`${config.layout === "SPLIT" ? 'w-1/4' : ''}`}>
+    <div className={`flex m-4 mb-12 ${layout === "SINGLE" ? 'flex-col': ''}`}>
+      <div className={`${layout === "SPLIT" ? 'w-1/4' : ''}`}>
         {profile.section1?.map((e, idx) => render(e, idx, "SECTION1"))}
       </div>
-      <div className={`${config.layout === "SPLIT" ? 'w-3/4' : ''}`}>
+      <div className={`${layout === "SPLIT" ? 'w-3/4' : ''}`}>
         {profile.section2?.map((e, idx) => render(e, idx, "SECTION2"))}
       </div> 
     </div>
+    {printMode && creditsRemaining === 0 && <span className="absolute bottom-0 left-0">Resume generated using <a className="underline text-blue-500" href="https://www.resumesgenie.com/">ResumesGenie</a></span>}
   </div>);
 }
 

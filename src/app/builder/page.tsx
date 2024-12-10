@@ -7,12 +7,31 @@ import { useConfig } from "../ConfigContext";
 import Profile from "@/types/profile";
 //import mixpanel from "mixpanel-browser";
 import { FullStory, init } from '@fullstory/browser';
+import { redirect, useSearchParams } from "next/navigation";
 
 const FULLSTORY_ORG_ID = 'o-228D0K-na1';
 
 const Page: React.FC = () => {
   const {profile, setProfile} = useProfile();
-  const {printMode} = useConfig();
+  const {printMode, setCreditsRemaining} = useConfig();
+  const searchParams = useSearchParams();
+
+  const paymentId = searchParams.get('payment_id');
+  const paymentStatus = searchParams.get('status');
+
+  async function verifyPayment() {
+    const response = await fetch('/api/user', { method: 'POST', body: JSON.stringify({action: 'verifyPayment', id: paymentId })});
+    const body = await response.json();
+    if (!response.ok || !body.success) {
+      console.log('Failed to verify payment');
+    }
+    redirect('/builder');
+  }
+
+  useEffect(() => {
+    if (paymentId && paymentStatus === 'succeeded')
+      verifyPayment();
+  }, []);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {

@@ -5,8 +5,7 @@ import EditableText from "./EditableText";
 import { useProfile } from "@/app/ProfileContext";
 import PartHoverMenu from "./PartHoverMenu";
 import InnerPartHoverMenu from "./InnerPartHoverMenu";
-import { LuCheck, LuPackage, LuShip } from "react-icons/lu";
-import { Text } from "@chakra-ui/react"
+import { fillBullet } from "@/lib/uiutils/fillBullet";
 
 function remover(item: SectionItem, index: number) {
   let sectionItem = item as Experience;
@@ -38,7 +37,7 @@ const ExperienceElement: React.FC<{ experience: Experience, section: SectionEnum
 
   if (experience.experiences.length === 0) experience.experiences.push({});
 
-  return (<div className="card relative group/i py-2 rounded-lg break-inside-avoid-page">
+  return (<div className="card relative group/i py-2 rounded-lg break-inside-avoid-page text-black">
     <PartHoverMenu section={section} sectionIndex={sectionIndex} />
     <div className="text-2xl">Experiences</div>
     <TimelineRoot variant="outline">
@@ -51,13 +50,13 @@ const ExperienceElement: React.FC<{ experience: Experience, section: SectionEnum
           <TimelineTitle className="flex">
             <EditableText placeholder="Company" value={e.company} className="text-lg text-blue-400 font-bold leading-none h-8" onChange={eve => updateExperience(idx, {company: eve.target.value})} />
           </TimelineTitle>
-          <TimelineDescription className="flex flex-col">
-            <div className="flex">
-              <EditableText placeholder="Role" value={e.role} className="h-6" onChange={eve => updateExperience(idx, {role: eve.target.value})} />
+          <TimelineDescription className="flex flex-col text-black font-normal">
+            <div className={`flex ${e.role || e.timeline ? '' : 'hidden group-hover/i:flex'}`}>
+              <EditableText placeholder="Role" value={e.role} className="h-6 font-bold" onChange={eve => updateExperience(idx, {role: eve.target.value})} />
               <EditableText placeholder="Since - Until" value={e.timeline} className="w-1/4 text-right flex-initial h-6" onChange={eve => updateExperience(idx, {timeline: eve.target.value})} />
             </div>
-            <div>
-              <EditableText placeholder="Description" value={e.text} multiline className="py-2" onChange={eve => updateExperience(idx, {text: eve.target.value})} />
+            <div className={`${e.text ? '' : 'hidden group-hover/i:flex'}`}>
+              <EditableText placeholder="Description" value={e.text} multiline className="py-2" onChange={eve => updateExperience(idx, {text: fillBullet(eve.target.value)})} />
             </div>
           </TimelineDescription>
         </TimelineContent>
@@ -65,7 +64,5 @@ const ExperienceElement: React.FC<{ experience: Experience, section: SectionEnum
     </TimelineRoot>
   </div>);
 };
-//<TimelineTitle>
-{/* <EditableText placeholder="Company" value={e.company} />
-</TimelineTitle> */}
+
 export default ExperienceElement;
