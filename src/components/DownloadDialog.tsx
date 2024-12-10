@@ -16,7 +16,7 @@ import { useEffect } from "react";
 import type { default as PrintJS } from 'print-js';
 import { FaCircleDollarToSlot } from "react-icons/fa6";
 import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import { UserResponse } from "@/app/api/user/route";
 import { useSession } from 'next-auth/react';
 import { useProfile } from "@/app/ProfileContext";
@@ -27,6 +27,25 @@ const DownloadDialog: React.FC<{}> = () => {
   const { creditsRemaining, setCreditsRemaining, printMode, setPrintMode } = useConfig();
   const { profile } = useProfile();
   const { data: session, status } = useSession();
+  const searchParams = useSearchParams();
+
+  const paymentId = searchParams.get('payment_id');
+  const paymentStatus = searchParams.get('status');
+
+  async function verifyPayment() {
+    const response = await fetch('/api/user', { method: 'POST', body: JSON.stringify({action: 'verifyPayment', id: paymentId })});
+    const body = await response.json();
+    if (!response.ok || !body.success) {
+      console.log('Failed to verify payment');
+    }
+    loadCreditsRemaining();
+    redirect('/builder');
+  }
+
+  useEffect(() => {
+    if (paymentId && paymentStatus === 'succeeded')
+      verifyPayment();
+  }, []);
 
   async function buyCredits() {
     if (status !== 'loading' && !session) {

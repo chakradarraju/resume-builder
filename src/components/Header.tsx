@@ -12,7 +12,7 @@ import { PopoverArrow, PopoverBody, PopoverContent, PopoverRoot, PopoverTrigger 
 import { SegmentedControl } from "./ui/segmented-control";
 import { HStack } from "@chakra-ui/react";
 import { PiColumnsPlusLeftBold, PiColumnsPlusRightBold, PiRowsPlusBottomBold, PiRowsPlusTopBold } from "react-icons/pi";
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
 import { GrList, GrTextAlignFull } from "react-icons/gr";
 import { MdOutlineFiberNew, MdOutlineWork } from "react-icons/md";
 import { RiDraftLine, RiGraduationCapFill } from "react-icons/ri";
@@ -101,7 +101,9 @@ const Header: React.FC<{}> = () => {
           setProfile({...profile, section2: profile.section2 ? [...profile.section2, t]: [t]});
         }} />
       </div>
-      <DownloadDialog />
+      <Suspense>
+        <DownloadDialog />
+      </Suspense>
     </div>
   </div>
 }
