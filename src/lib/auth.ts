@@ -1,10 +1,8 @@
 import NextAuth from "next-auth";
-import { MongoDBAdapter } from "@auth/mongodb-adapter";
-import mongoClient from "@/lib/mongo";
 import Google from "next-auth/providers/google"
 
 if (!process.env.AUTH_GOOGLE_ID || !process.env.AUTH_GOOGLE_SECRET) {
-  console.error('Missing Google OAuth creds');
+  console.error('Missing Google OAuth creds', process.env);
   process.exit(1);
 }
 
