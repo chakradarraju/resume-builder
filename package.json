@@ -13,6 +13,7 @@
     "@chakra-ui/react": "^3.2.2",
     "@emotion/react": "^11.13.5",
     "@fullstory/browser": "^2.0.6",
+    "cheerio": "^1.0.0",
     "mongodb": "^6.11.0",
     "next": "15.0.3",
     "next-auth": "5.0.0-beta.25",

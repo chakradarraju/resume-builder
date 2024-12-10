@@ -15,11 +15,11 @@ const Page: React.FC = () => {
   const {profile, setProfile} = useProfile();
   const {printMode} = useConfig();
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      init({ orgId: FULLSTORY_ORG_ID });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (typeof window !== 'undefined') {
+  //     init({ orgId: FULLSTORY_ORG_ID });
+  //   }
+  // }, []);
   // useEffect(() => {
   //   mixpanel.init("f7fb8a723ec41c96963a52173e0bef49", {
   //     debug: true,

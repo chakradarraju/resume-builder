@@ -18,6 +18,7 @@ import { MdOutlineFiberNew, MdOutlineWork } from "react-icons/md";
 import { RiDraftLine, RiGraduationCapFill } from "react-icons/ri";
 import DownloadDialog from "./DownloadDialog";
 import { signOut } from "next-auth/react";
+import JobDescriptionDialog from "./JobDescriptionDialog";
 
 const LayoutButton: React.FC<{layout: LayoutEnum, setLayout: React.Dispatch<React.SetStateAction<LayoutEnum>>}> = ({layout, setLayout}) => {
   return (<div className="flex">
@@ -101,6 +102,7 @@ const Header: React.FC<{}> = () => {
           setProfile({...profile, section2: profile.section2 ? [...profile.section2, t]: [t]});
         }} />
       </div>
+      <JobDescriptionDialog />
       <Suspense>
         <DownloadDialog />
       </Suspense>

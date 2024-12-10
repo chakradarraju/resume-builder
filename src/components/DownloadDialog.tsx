@@ -15,9 +15,7 @@ import { FaDownload } from "react-icons/fa";
 import { useEffect } from "react";
 import type { default as PrintJS } from 'print-js';
 import { FaCircleDollarToSlot } from "react-icons/fa6";
-import { auth } from "@/lib/auth";
 import { redirect, useSearchParams } from "next/navigation";
-import { UserResponse } from "@/app/api/user/route";
 import { useSession } from 'next-auth/react';
 import { useProfile } from "@/app/ProfileContext";
 
