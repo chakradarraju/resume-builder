@@ -18,6 +18,7 @@ import { FaCircleDollarToSlot } from "react-icons/fa6";
 import { redirect, useSearchParams } from "next/navigation";
 import { useSession } from 'next-auth/react';
 import { useProfile } from "@/app/ProfileContext";
+import { HiOutlineDocumentText } from "react-icons/hi2";
 
 var printJS: (typeof PrintJS | null) = null;
 
@@ -100,7 +101,7 @@ const DownloadDialog: React.FC<{}> = () => {
   return (<DialogRoot>
     <DialogBackdrop />
     <DialogTrigger asChild>
-      <Button colorPalette="orange" className="mx-2" color="white"><FaDownload /> Download</Button>
+      <Button colorPalette="orange" className="mx-2" color="white"><HiOutlineDocumentText /> Download</Button>
     </DialogTrigger>
     <DialogContent color="black">
       <DialogCloseTrigger />

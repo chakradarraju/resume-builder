@@ -1,8 +1,14 @@
 'use client';
 
+import {
+  MenuContent,
+  MenuItem,
+  MenuRoot,
+  MenuTrigger,
+} from "@/components/ui/menu";
 import { Button } from "@chakra-ui/react";
-import { FaGripHorizontal, FaSave, FaSignOutAlt } from "react-icons/fa";
-import { HiMiniQueueList } from "react-icons/hi2";
+import { FaGripHorizontal } from "react-icons/fa";
+import { HiMiniQueueList, HiOutlineDocument, HiOutlineDocumentArrowDown, HiOutlineDocumentCheck } from "react-icons/hi2";
 import { useProfile } from '../app/ProfileContext';
 import { LayoutEnum, useConfig } from "@/app/ConfigContext";
 import { EMPTY_PROFILE, SectionItem } from "@/types/profile";
@@ -14,11 +20,12 @@ import { HStack } from "@chakra-ui/react";
 import { PiColumnsPlusLeftBold, PiColumnsPlusRightBold, PiRowsPlusBottomBold, PiRowsPlusTopBold } from "react-icons/pi";
 import { ReactNode, Suspense } from "react";
 import { GrList, GrTextAlignFull } from "react-icons/gr";
-import { MdOutlineFiberNew, MdOutlineWork } from "react-icons/md";
-import { RiDraftLine, RiGraduationCapFill } from "react-icons/ri";
+import { MdOutlineWork } from "react-icons/md";
+import { RiGraduationCapFill } from "react-icons/ri";
 import DownloadDialog from "./DownloadDialog";
 import { signOut } from "next-auth/react";
 import JobDescriptionDialog from "./JobDescriptionDialog";
+import { HiOutlineLogout } from "react-icons/hi";
 
 const LayoutButton: React.FC<{layout: LayoutEnum, setLayout: React.Dispatch<React.SetStateAction<LayoutEnum>>}> = ({layout, setLayout}) => {
   return (<div className="flex">
@@ -68,29 +75,42 @@ const Header: React.FC<{}> = () => {
   const { profile, setProfile, unsavedChanges, saveProfileToLocalStorage } = useProfile();
   const { layout, setLayout } = useConfig();
 
+  function downloadProfile() {
+    const profileWithoutPic = {...profile};
+    delete profileWithoutPic.picture;
+    const data = JSON.stringify(profileWithoutPic, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const fileUrl = URL.createObjectURL(blob);
+    const downloadLink = document.createElement('a');
+    downloadLink.href = fileUrl;
+    downloadLink.download = profile.name?.replace(' ', '_') + ".json";
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    URL.revokeObjectURL(fileUrl);
+    document.body.removeChild(downloadLink);
+  }
+
   const MainMenu: React.FC<{}> = () => {
-    return (<PopoverRoot>
-      <PopoverTrigger asChild>
-        <Button variant="plain" size="sm" color="white">
-          <HiMiniQueueList className="my-auto m-1" /> 
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent>
-        <PopoverArrow />
-        <PopoverBody className="p-0">
-          <Button onClick={() => setProfile(EMPTY_PROFILE)} variant="plain" className="w-full text-left" colorPalette="transparent">New resume</Button>
-          <Button onClick={() => saveProfileToLocalStorage()} variant="plain" className="w-full text-left" colorPalette="white" disabled={!unsavedChanges}>{unsavedChanges ? 'Save changes' : 'Already saved'}</Button>
-          <Button onClick={() => signOut()} variant="plain" className="w-full text-left" colorPalette="white">Sign out</Button>
-        </PopoverBody>
-      </PopoverContent>
-    </PopoverRoot>)
+    return (<MenuRoot>
+      <MenuTrigger as={Button} colorScheme="blue">
+        <HiMiniQueueList /> 
+      </MenuTrigger>
+      <MenuContent>
+        <MenuItem onClick={() => setProfile(EMPTY_PROFILE)} value="clear"><HiOutlineDocument />Clear resume</MenuItem>
+        <MenuItem onClick={() => saveProfileToLocalStorage()} value="save" disabled={!unsavedChanges}><HiOutlineDocumentCheck />{unsavedChanges ? 'Save changes' : 'Already saved'}</MenuItem>
+        <MenuItem onClick={() => downloadProfile()} value="download"><HiOutlineDocumentArrowDown />Download resume data</MenuItem>
+        <MenuItem onClick={() => signOut()} value="signout"><HiOutlineLogout />Sign out</MenuItem>
+      </MenuContent>
+    </MenuRoot>)
   }
 
   return <div className="w-full flex fixed z-[200]">
     <div className="p-4 bg-black text-white rounded-xl flex m-3 grow">
-      <MainMenu />
-      <div className="text-lg font-bold my-auto">
-        Resume builder
+      <div className="flex flex-1">
+        <MainMenu />
+        <div className="text-lg font-bold my-auto">
+          Resume builder
+        </div>
       </div>
       <div className="flex flex-1 justify-center">
         <LayoutButton layout={layout} setLayout={setLayout} />
@@ -102,10 +122,12 @@ const Header: React.FC<{}> = () => {
           setProfile({...profile, section2: profile.section2 ? [...profile.section2, t]: [t]});
         }} />
       </div>
-      <JobDescriptionDialog />
-      <Suspense>
-        <DownloadDialog />
-      </Suspense>
+      <div className="flex flex-1 justify-end">
+        <JobDescriptionDialog />
+        <Suspense>
+          <DownloadDialog />
+        </Suspense>
+      </div>
     </div>
   </div>
 }

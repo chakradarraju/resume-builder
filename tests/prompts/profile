@@ -1,0 +1,65 @@
+{
+  "name": "Hannah Peterson",
+  "role": "Marketing Coordinator",
+  "section2": [
+    {
+      "experiences": [
+        {
+          "company": "Marketing Coordinator",
+          "role": "BrightLeaf Events, Chicago, IL",
+          "text": "• Coordinate with creative agencies to execute integrated marketing campaigns, resulting in a 20% increase in event attendance year-over-year.\n• Manage social media calendars across multiple platforms, growing follower count by 15% and improving engagement by 25%.\n• Organize virtual and in-person corporate events and workshops, overseeing vendor negotiations, venue selection, and attendee registration.\n• Collaborate with the design team to produce promotional materials, ensuring brand consistency and timely distribution.",
+          "timeline": "2019–Present"
+        },
+        {
+          "company": "Marketing Assistant",
+          "role": "Rosewood Agency, Chicago, IL",
+          "text": "• Assisted in developing marketing briefs and pitch decks for prospective clients, contributing to a 10% increase in new client acquisitions.\n• Supported the marketing team in researching industry trends and competitor activities to refine branding strategies.\n• Maintained an organized system for tracking campaign performance metrics, enabling data-driven decision-making and ongoing improvement.",
+          "timeline": "2017–2019"
+        }
+      ]
+    },
+    {
+      "course": [
+        {
+          "school": "University of Illinois at Urbana-Champaign",
+          "degree": "B.A. in Communications",
+          "timeline": "2017",
+          "text": "• Emphasis on Advertising and Public Relations\n• Active member of the University Marketing Club "
+        },
+        {
+          "school": "Professional Development & Affiliations",
+          "text": "• HubSpot Inbound Marketing Certified (2020)\n• Member, American Marketing Association (AMA)"
+        }
+      ]
+    },
+    {
+      "type": "CHIPS",
+      "list": [
+        "Community Volunteering",
+        "Travel & Cultural Experiences",
+        "Photography"
+      ],
+      "heading": "Interests"
+    }
+  ],
+  "section1": [
+    {
+      "type": "TEXT",
+      "heading": "About me",
+      "text": "Enthusiastic and organized Marketing Coordinator with 3+ years of experience in brand communications, event planning, and social media management. Adept at working in cross-functional teams to enhance brand awareness and engage diverse audiences. Passionate about storytelling, data-driven strategy, and cultivating strong relationships with clients and partners."
+    },
+    {
+      "type": "CHIPS",
+      "list": [
+        "Brand Messaging",
+        "Social Media Campaigns",
+        "Copywriting",
+        "Event Planning",
+        "Influencer Partnership",
+        "Budget Management",
+        "Basic Graphic Design"
+      ],
+      "heading": "Core Skills"
+    }
+  ]
+}

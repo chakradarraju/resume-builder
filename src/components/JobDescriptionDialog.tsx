@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button, Input, Textarea } from "@chakra-ui/react";
 import { useState } from "react";
-import { MdOutlineWork } from "react-icons/md";
+import { HiOutlineBriefcase } from "react-icons/hi2";
 
 const JobDescriptionDialog: React.FC<{}> = () => {
   const [url, setUrl] = useState('');
@@ -30,7 +30,7 @@ const JobDescriptionDialog: React.FC<{}> = () => {
   return (<DialogRoot lazyMount open={open} onOpenChange={e => setOpen(e.open)}>
     <DialogBackdrop />
     <DialogTrigger asChild>
-      <Button colorPalette="orange" className="mx-2" color="white"><MdOutlineWork /> Fetch job description</Button>
+      <Button colorPalette="orange" className="mx-2" color="white"><HiOutlineBriefcase /> Fetch job description</Button>
     </DialogTrigger>
     <DialogContent color="black" className="max-h-fit">
       <DialogCloseTrigger />

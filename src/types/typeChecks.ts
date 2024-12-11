@@ -1,13 +1,21 @@
-import { Education, Experience, Part, SectionItem } from "./profile";
+import { CoursePart, Education, Experience, ExperiencePart, Part } from "./profile";
 
-export function isExperience(p: SectionItem): p is Experience {
+export function isExperience(p: any): p is Experience {
   return (p as Experience).experiences !== undefined;
 }
 
-export function isEducation(p: SectionItem): p is Education {
+export function isEducation(p: any): p is Education {
   return (p as Education).course !== undefined;
 }
 
-export function isPart(p: SectionItem): p is Part {
+export function isPart(p: any): p is Part {
   return (p as Part).heading !== undefined;
+}
+
+export function isExperiencePart(p: any): p is ExperiencePart {
+  return (p as ExperiencePart).role !== undefined;
+}
+
+export function isCoursePart(p: any): p is CoursePart {
+  return (p as CoursePart).degree !== undefined;
 }
