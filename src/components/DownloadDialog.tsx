@@ -18,7 +18,7 @@ import { FaCircleDollarToSlot } from "react-icons/fa6";
 import { redirect, useSearchParams } from "next/navigation";
 import { useSession } from 'next-auth/react';
 import { useProfile } from "@/app/ProfileContext";
-import { HiOutlineDocumentText } from "react-icons/hi2";
+import { HiOutlineCurrencyDollar, HiOutlineDocumentText } from "react-icons/hi2";
 
 var printJS: (typeof PrintJS | null) = null;
 
@@ -114,9 +114,9 @@ const DownloadDialog: React.FC<{}> = () => {
         {creditsRemaining === 0 && <p>You can download resume for free (which will include ResumeGenie watermark), or purchase credits and download resume without watermark.</p>}
       </DialogBody>
       <DialogFooter>
-        {creditsRemaining === 0 && <Button variant="outline" className="mx-2" onClick={exportToPDF}><FaDownload /> Free Download</Button>}
-        {creditsRemaining === 0 && <Button colorPalette="orange" className="mx-2" onClick={buyCredits}><FaCircleDollarToSlot /> Purchase credits</Button>}
-        {creditsRemaining > 0 && <Button colorPalette="orange" className="mx-2" color="white" onClick={exportToPDF}><FaDownload /> Download</Button>}
+        {creditsRemaining === 0 && <Button variant="outline" className="mx-2" onClick={exportToPDF}><HiOutlineDocumentText /> Free Download</Button>}
+        {creditsRemaining === 0 && <Button colorPalette="orange" className="mx-2" onClick={buyCredits}><HiOutlineCurrencyDollar /> Purchase credits</Button>}
+        {creditsRemaining > 0 && <Button colorPalette="orange" className="mx-2" color="white" onClick={exportToPDF}><HiOutlineDocumentText /> Download</Button>}
       </DialogFooter>
     </DialogContent>
   </DialogRoot>)

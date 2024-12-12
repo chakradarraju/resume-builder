@@ -73,7 +73,7 @@ const AddButton: React.FC<{ icon: ReactNode, onAdd: (t: SectionItem) => void, al
 const Header: React.FC<{}> = () => {
   const { profile, setProfile, unsavedChanges, saveProfileToLocalStorage } = useProfile();
   const { layout, setLayout } = useConfig();
-  const loadProfileInput = useRef(null);
+  const loadProfileInput = useRef<HTMLInputElement>(null);
 
   async function handleLoadProfile(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.files && event.target.files[0]) {
@@ -113,7 +113,7 @@ const Header: React.FC<{}> = () => {
   }
 
   return <div className="w-full flex fixed z-[200]">
-    <input type="file" ref={loadProfileInput} className="hidden" onChange={handleLoadProfile} /> 
+    <input type="file" ref={loadProfileInput} className="hidden" onChange={handleLoadProfile} accept="application/json" /> 
     <div className="p-4 bg-black text-white rounded-xl flex m-3 grow">
       <div className="flex flex-1">
         <MainMenu />
