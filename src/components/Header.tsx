@@ -8,17 +8,17 @@ import {
 } from "@/components/ui/menu";
 import { Button } from "@chakra-ui/react";
 import { FaGripHorizontal } from "react-icons/fa";
-import { HiMiniQueueList, HiOutlineDocument, HiOutlineDocumentArrowDown, HiOutlineDocumentCheck } from "react-icons/hi2";
+import { HiMiniQueueList, HiOutlineDocument, HiOutlineDocumentArrowDown, HiOutlineDocumentArrowUp, HiOutlineDocumentCheck } from "react-icons/hi2";
 import { useProfile } from '../app/ProfileContext';
 import { LayoutEnum, useConfig } from "@/app/ConfigContext";
-import { EMPTY_PROFILE, SectionItem } from "@/types/profile";
+import Profile, { EMPTY_PROFILE, SectionItem } from "@/types/profile";
 import { BsWindowFullscreen, BsWindowSidebar } from "react-icons/bs";
 import { Separator } from "@chakra-ui/react/separator";
 import { PopoverArrow, PopoverBody, PopoverContent, PopoverRoot, PopoverTrigger } from "./ui/popover";
 import { SegmentedControl } from "./ui/segmented-control";
 import { HStack } from "@chakra-ui/react";
 import { PiColumnsPlusLeftBold, PiColumnsPlusRightBold, PiRowsPlusBottomBold, PiRowsPlusTopBold } from "react-icons/pi";
-import { ReactNode, Suspense } from "react";
+import { ChangeEvent, ReactNode, Suspense, useRef } from "react";
 import { GrList, GrTextAlignFull } from "react-icons/gr";
 import { MdOutlineWork } from "react-icons/md";
 import { RiGraduationCapFill } from "react-icons/ri";
@@ -70,10 +70,17 @@ const AddButton: React.FC<{ icon: ReactNode, onAdd: (t: SectionItem) => void, al
 }
 
 
-
 const Header: React.FC<{}> = () => {
   const { profile, setProfile, unsavedChanges, saveProfileToLocalStorage } = useProfile();
   const { layout, setLayout } = useConfig();
+  const loadProfileInput = useRef(null);
+
+  async function handleLoadProfile(event: ChangeEvent<HTMLInputElement>) {
+    if (event.target.files && event.target.files[0]) {
+      const fileProfile = JSON.parse(await event.target.files[0].text()) as Profile;
+      setProfile(fileProfile);
+    }
+  }
 
   function downloadProfile() {
     const profileWithoutPic = {...profile};
@@ -99,12 +106,14 @@ const Header: React.FC<{}> = () => {
         <MenuItem onClick={() => setProfile(EMPTY_PROFILE)} value="clear"><HiOutlineDocument />Clear resume</MenuItem>
         <MenuItem onClick={() => saveProfileToLocalStorage()} value="save" disabled={!unsavedChanges}><HiOutlineDocumentCheck />{unsavedChanges ? 'Save changes' : 'Already saved'}</MenuItem>
         <MenuItem onClick={() => downloadProfile()} value="download"><HiOutlineDocumentArrowDown />Download resume data</MenuItem>
+        <MenuItem onClick={() => loadProfileInput.current?.click()} value="load"><HiOutlineDocumentArrowUp />Load profile</MenuItem>
         <MenuItem onClick={() => signOut()} value="signout"><HiOutlineLogout />Sign out</MenuItem>
       </MenuContent>
     </MenuRoot>)
   }
 
   return <div className="w-full flex fixed z-[200]">
+    <input type="file" ref={loadProfileInput} className="hidden" onChange={handleLoadProfile} /> 
     <div className="p-4 bg-black text-white rounded-xl flex m-3 grow">
       <div className="flex flex-1">
         <MainMenu />

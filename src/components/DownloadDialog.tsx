@@ -71,8 +71,9 @@ const DownloadDialog: React.FC<{}> = () => {
 
   async function loadCreditsRemaining() {
     const response = await fetch('/api/user');
+    if (!response.ok) setCreditsRemaining(0);
     const responseBody = await response.json().catch(console.error);
-    setCreditsRemaining(responseBody.creditsRemaining ?? 0);
+    setCreditsRemaining(responseBody?.creditsRemaining ?? 0);
   }
 
   useEffect(() => {
