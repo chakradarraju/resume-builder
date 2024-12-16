@@ -16,6 +16,7 @@ export interface Part {
   heading?: string,
   text?: string,
   list?: string[],
+  showBullets?: boolean,
 }
 
 export interface Experience {

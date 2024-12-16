@@ -26,6 +26,12 @@ function listItemSwapper(item: SectionItem, idx: number, targetIdx: number) {
   [sectionItem.list[idx], sectionItem.list[targetIdx]] = [sectionItem.list[targetIdx], sectionItem.list[idx]];
 }
 
+function bulletToggle(items: SectionItem[], idx: number) {
+  let sectionItem = items[idx] as Part;
+  if (!sectionItem.list) return;
+  sectionItem.showBullets = !sectionItem.showBullets;
+}
+
 const GenericElement: React.FC<{ part: Part, section: SectionEnum, sectionIndex: number, id: string }> = ({ part, section, sectionIndex, id }) => {
   const { profile, setProfile } = useProfile();
 
@@ -51,12 +57,12 @@ const GenericElement: React.FC<{ part: Part, section: SectionEnum, sectionIndex:
   if ((part.type === PartType.List || part.type === PartType.Chips) && !part.list) part.list = [''];
 
   return (<div className="relative group/i break-inside-avoid-page">
-    <PartHoverMenu section={section} sectionIndex={sectionIndex} />
+    <PartHoverMenu section={section} sectionIndex={sectionIndex} bulletToggle={part.type === PartType.List ? bulletToggle : undefined} showBullets={part.showBullets} />
     <EditableText placeholder="Heading" value={part.heading} className="text-2xl" onChange={ele => updatePart({heading: ele.target.value})} />
     {part.type === PartType.Text && <EditableText placeholder="Description" multiline value={part.text} onChange={ele => updatePart({text: ele.target.value})} />}
-    {part.type === PartType.List && <ul className="list-disc">
-      {part.list?.map((i, idx) => <li key={idx} className="relative group/ii ml-6">
-        <InnerPartHoverMenu section={section} sectionIndex={sectionIndex} idx={idx} len={part.list?.length || 0} adder={listItemAdder} remover={listItemRemover} swapper={listItemSwapper}/>
+    {part.type === PartType.List && <ul className={`${part.showBullets ? 'list-disc' : ''}`}>
+      {part.list?.map((i, idx) => <li key={idx} className={`relative group/ii ${part.showBullets ? 'ml-6' : ''}`}>
+        <InnerPartHoverMenu section={section} sectionIndex={sectionIndex} idx={idx} len={part.list?.length || 0} adder={listItemAdder} remover={listItemRemover} swapper={listItemSwapper} />
         <EditableText placeholder="..." value={i} className="h-6" onChange={ele => updateList(idx, ele.target.value)} />
       </li>)}
     </ul>}

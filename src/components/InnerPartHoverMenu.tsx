@@ -1,6 +1,6 @@
 import { useProfile } from "@/app/ProfileContext";
 import { getSection } from "@/lib/typeUtils";
-import Profile, { SectionEnum, SectionItem } from "@/types/profile";
+import { SectionEnum, SectionItem } from "@/types/profile";
 import { IoCloseCircle } from "react-icons/io5";
 import { MdMoveDown, MdMoveUp, MdPlaylistAdd } from "react-icons/md";
 import { TbArrowMoveLeft, TbArrowMoveRight } from "react-icons/tb";

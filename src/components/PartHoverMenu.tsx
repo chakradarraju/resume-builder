@@ -1,10 +1,11 @@
 import { useProfile } from "@/app/ProfileContext";
 import { getSection } from "@/lib/typeUtils";
 import Profile, { SectionEnum, SectionItem } from "@/types/profile";
+import { GoDot, GoDotFill } from "react-icons/go";
 import { IoCloseCircle } from "react-icons/io5";
 import { MdMoveDown, MdMoveUp } from "react-icons/md";
 
-const PartHoverMenu: React.FC<{section: SectionEnum, sectionIndex: number}> = ({section, sectionIndex}) => {
+const PartHoverMenu: React.FC<{section: SectionEnum, sectionIndex: number, showBullets?: boolean, bulletToggle?: (i: SectionItem[], idx: number) => void}> = ({section, sectionIndex, showBullets, bulletToggle}) => {
   const { profile, setProfile } = useProfile();
 
   const sectionLength = getSection(profile, section)?.length ?? 0;;
@@ -26,6 +27,9 @@ const PartHoverMenu: React.FC<{section: SectionEnum, sectionIndex: number}> = ({
   }
 
   return (<div className="absolute top-0 right-0 mt-2 mr-2 opacity-0 text-gray-500 group-hover/i:opacity-100 z-10">
+    {bulletToggle && <button onClick={() => run((i) => bulletToggle(i, sectionIndex))}>
+      {showBullets ? <GoDot /> : <GoDotFill />}
+    </button>}
     {sectionIndex !== 0 && <button className="inline-block mx-1" onClick={() => run((i) => swap(i, sectionIndex - 1))}>
       <MdMoveUp />
     </button>}
