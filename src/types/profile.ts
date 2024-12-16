@@ -1,5 +1,16 @@
+export enum SectionEnum {
+  Section1,
+  Section2
+};
+
+export enum PartType {
+  Text, List, Chips
+}
+
+export type SectionItem = (Experience | Education | Part);
+
 export interface Part {
-  type: "TEXT" | "LIST" | "CHIPS",
+  type: PartType,
   heading?: string,
   text?: string,
   list?: string[],
@@ -39,12 +50,9 @@ export const EMPTY_PROFILE: Profile = {
   name: '',
   role: '',
   picture: '',
-  section1: [{type: "TEXT", heading: 'About me'}, {type: "LIST", heading: 'Contacts'}],
-  section2: [{experiences:[]}, {course:[]}, {type: "LIST", heading: 'Skills'}]
+  section1: [{type: PartType.Text, heading: 'About me'}, {type: PartType.List, heading: 'Contacts'}],
+  section2: [{experiences:[]}, {course:[]}, {type: PartType.List, heading: 'Skills'}]
 };
 
-export type SectionEnum = "SECTION1" | "SECTION2";
-
-export type SectionItem = (Experience | Education | Part);
 
 export default Profile;

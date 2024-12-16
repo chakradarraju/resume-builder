@@ -1,6 +1,9 @@
 import { createContext, useContext, useMemo, useState } from "react";
 
-export type LayoutEnum = ("SINGLE" | "SPLIT")
+export enum LayoutEnum {
+  Single = "SINGLE",
+  Split = "SPLIT"
+}
 
 interface ConfigContextType {
   layout: LayoutEnum;
@@ -16,7 +19,7 @@ interface ConfigContextType {
 const ConfigContext = createContext<ConfigContextType | undefined>(undefined);
 
 export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [layout, setLayout] = useState<LayoutEnum>("SPLIT");
+  const [layout, setLayout] = useState<LayoutEnum>(LayoutEnum.Split);
   const [printMode, setPrintMode] = useState<boolean>(false);
   const [creditsRemaining, setCreditsRemaining] = useState<number>(0);
   const [jobDescription, setJobDescription] = useState<string>("");

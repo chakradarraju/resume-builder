@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { CheerioAPI, load } from 'cheerio';
+import { load } from 'cheerio';
 
 export async function POST(req: NextRequest) {
   const body = await req.json();

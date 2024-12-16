@@ -42,7 +42,7 @@ const Page: React.FC = () => {
   }, [profile, setProfile]);
 
   return (<div className="w-full" id="page-container">
-    <div className={`bg-white w-[1000px] min-w-[1000px] min-h-[1400px] p-12 print:p-2 ${printMode ? 'm-0' : 'mx-auto mt-24 mb-4'}`} id="page-1">
+    <div className={`bg-white w-[1000px] min-w-[1000px] min-h-[1400px] p-12 print:p-2 drop-shadow-md ${printMode ? 'm-0' : 'mx-auto mt-24 mb-4'}`} id="page-1">
       <ResumeLayout profile={profile} setProfile={setProfile} />
     </div>
   </div>)

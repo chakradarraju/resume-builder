@@ -4,6 +4,7 @@ import { useProfile } from "@/app/ProfileContext";
 import PartHoverMenu from "./PartHoverMenu";
 import InnerPartHoverMenu from "./InnerPartHoverMenu";
 import { fillBullet } from "@/lib/uiutils/fillBullet";
+import { getSection } from "@/lib/typeUtils";
 
 function remover(item: SectionItem, index: number) {
   let sectionItem = item as Education;
@@ -25,7 +26,7 @@ const EducationElement: React.FC<{ education: Education, section: SectionEnum, s
   
   function updateEducation(courseIndex: number, update: object) {
     let newProfile = {...profile};
-    let sectionToUpdate = section === "SECTION1" ? newProfile.section1 : newProfile.section2;
+    let sectionToUpdate = getSection(newProfile, section);
     if (!sectionToUpdate) return;
     let sectionItem = sectionToUpdate[sectionIndex] as Education;
     let course = sectionItem.course[courseIndex];

@@ -5,7 +5,7 @@ import EducationElement from "@/components/EducationElement";
 import ExperienceElement from "@/components/ExperienceElement";
 import GenericElement from "@/components/GenericElement";
 import ProfileEditor from "@/types/profileEditor";
-import { useConfig } from "@/app/ConfigContext";
+import { LayoutEnum, useConfig } from "@/app/ConfigContext";
 import { isEducation, isExperience } from "@/types/typeChecks";
 
 export function render(p: SectionItem, idx: number, section: SectionEnum) {
@@ -26,12 +26,12 @@ const ResumeLayout: React.FC<ProfileEditor> = ({ profile, setProfile }) => {
         <EditableText placeholder="Your designation" className="uppercase font-bold" value={profile.role} onChange={e => setProfile({...profile, role: e.target.value })} />
       </div>
     </div>
-    <div className={`flex m-4 mb-12 ${layout === "SINGLE" ? 'flex-col': ''}`}>
-      <div className={`${layout === "SPLIT" ? 'w-1/4' : ''}`}>
-        {profile.section1?.map((e, idx) => render(e, idx, "SECTION1"))}
+    <div className={`flex m-4 mb-12 ${layout === LayoutEnum.Single ? 'flex-col': ''}`}>
+      <div className={`${layout === LayoutEnum.Split ? 'w-1/4' : ''}`}>
+        {profile.section1?.map((e, idx) => render(e, idx, SectionEnum.Section1))}
       </div>
-      <div className={`${layout === "SPLIT" ? 'w-3/4' : ''}`}>
-        {profile.section2?.map((e, idx) => render(e, idx, "SECTION2"))}
+      <div className={`${layout === LayoutEnum.Split ? 'w-3/4' : ''}`}>
+        {profile.section2?.map((e, idx) => render(e, idx, SectionEnum.Section2))}
       </div> 
     </div>
     {printMode && creditsRemaining === 0 && <span className="absolute bottom-0 left-0">Resume generated using <a className="underline text-blue-500" href="https://www.resumesgenie.com/">ResumesGenie</a></span>}

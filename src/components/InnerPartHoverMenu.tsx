@@ -1,4 +1,5 @@
 import { useProfile } from "@/app/ProfileContext";
+import { getSection } from "@/lib/typeUtils";
 import Profile, { SectionEnum, SectionItem } from "@/types/profile";
 import { IoCloseCircle } from "react-icons/io5";
 import { MdMoveDown, MdMoveUp, MdPlaylistAdd } from "react-icons/md";
@@ -9,7 +10,7 @@ const InnerPartHoverMenu: React.FC<{idx: number, len: number, section: SectionEn
 
   function run(op: (i: SectionItem) => void) {
     let newProfile = {...profile};
-    let sectionToUpdate = section === "SECTION1" ? newProfile.section1 : newProfile.section2;
+    let sectionToUpdate = getSection(newProfile, section);
     if (!sectionToUpdate) return;
     op(sectionToUpdate[sectionIndex]);
     setProfile(newProfile);

@@ -11,7 +11,7 @@ import { FaGripHorizontal } from "react-icons/fa";
 import { HiMiniQueueList, HiOutlineDocument, HiOutlineDocumentArrowDown, HiOutlineDocumentArrowUp, HiOutlineDocumentCheck } from "react-icons/hi2";
 import { useProfile } from '../app/ProfileContext';
 import { LayoutEnum, useConfig } from "@/app/ConfigContext";
-import Profile, { EMPTY_PROFILE, SectionItem } from "@/types/profile";
+import Profile, { EMPTY_PROFILE, PartType, SectionItem } from "@/types/profile";
 import { BsWindowFullscreen, BsWindowSidebar } from "react-icons/bs";
 import { Separator } from "@chakra-ui/react/separator";
 import { PopoverArrow, PopoverBody, PopoverContent, PopoverRoot, PopoverTrigger } from "./ui/popover";
@@ -24,7 +24,7 @@ import { MdOutlineWork } from "react-icons/md";
 import { RiGraduationCapFill } from "react-icons/ri";
 import DownloadDialog from "./DownloadDialog";
 import { signOut } from "next-auth/react";
-import JobDescriptionDialog from "./JobDescriptionDialog";
+import ReviewResumeDialog from "./ReviewResumeDialog";
 import { HiOutlineLogout } from "react-icons/hi";
 
 const LayoutButton: React.FC<{layout: LayoutEnum, setLayout: React.Dispatch<React.SetStateAction<LayoutEnum>>}> = ({layout, setLayout}) => {
@@ -32,15 +32,15 @@ const LayoutButton: React.FC<{layout: LayoutEnum, setLayout: React.Dispatch<Reac
     <PopoverRoot positioning={{ placement: "bottom" }}>
       <PopoverTrigger asChild>
         <Button variant="plain" size="sm" color="white">
-          {layout === "SINGLE" ? <BsWindowFullscreen /> : <BsWindowSidebar />}
+          {layout === LayoutEnum.Single ? <BsWindowFullscreen /> : <BsWindowSidebar />}
         </Button>
       </PopoverTrigger>
       <PopoverContent>
         <PopoverArrow />
         <PopoverBody>
           <SegmentedControl value={layout} onValueChange={({value}: {value: LayoutEnum}) => setLayout(value) } items={[
-            { value: "SINGLE", label: <HStack><BsWindowFullscreen /> Classic layout</HStack> },
-            { value: "SPLIT", label: <HStack><BsWindowSidebar /> Split layout</HStack>}]} />
+            { value: LayoutEnum.Single, label: <HStack><BsWindowFullscreen /> Classic layout</HStack> },
+            { value: LayoutEnum.Split, label: <HStack><BsWindowSidebar /> Split layout</HStack>}]} />
         </PopoverBody>
       </PopoverContent>
     </PopoverRoot>
@@ -60,9 +60,9 @@ const AddButton: React.FC<{ icon: ReactNode, onAdd: (t: SectionItem) => void, al
         <PopoverBody>
           {allowExpEdu && <Button value="add-experience" onClick={() => onAdd({experiences: []})} title="Experience"><MdOutlineWork /></Button>}
           {allowExpEdu && <Button value="add-education" onClick={() => onAdd({course: []})} title="Education"><RiGraduationCapFill /></Button>}
-          <Button value="add-text" onClick={() => onAdd({type: "TEXT"})} title="Text"><GrTextAlignFull/></Button>
-          <Button value="add-list" onClick={() => onAdd({type: "LIST"})} title="List"><GrList /></Button>
-          <Button value="add-chips" onClick={() => onAdd({type: "CHIPS"})} title="Chips"><FaGripHorizontal /></Button>
+          <Button value="add-text" onClick={() => onAdd({type: PartType.Text})} title="Text"><GrTextAlignFull/></Button>
+          <Button value="add-list" onClick={() => onAdd({type: PartType.List})} title="List"><GrList /></Button>
+          <Button value="add-chips" onClick={() => onAdd({type: PartType.Chips})} title="Chips"><FaGripHorizontal /></Button>
         </PopoverBody>
       </PopoverContent>
     </PopoverRoot>
@@ -124,15 +124,15 @@ const Header: React.FC<{}> = () => {
       <div className="flex flex-1 justify-center">
         <LayoutButton layout={layout} setLayout={setLayout} />
         <Separator orientation="vertical" />
-        <AddButton icon={layout === "SINGLE" ? <PiRowsPlusTopBold /> : <PiColumnsPlusLeftBold />} onAdd={(t) => {
+        <AddButton icon={layout === LayoutEnum.Single ? <PiRowsPlusTopBold /> : <PiColumnsPlusLeftBold />} onAdd={(t) => {
           setProfile({...profile, section1: profile.section1 ? [...profile.section1, t] : [t]});
         }} allowExpEdu={false} />
-        <AddButton icon={layout === "SINGLE" ? <PiRowsPlusBottomBold /> : <PiColumnsPlusRightBold />} onAdd={(t) => {
+        <AddButton icon={layout === LayoutEnum.Single ? <PiRowsPlusBottomBold /> : <PiColumnsPlusRightBold />} onAdd={(t) => {
           setProfile({...profile, section2: profile.section2 ? [...profile.section2, t]: [t]});
         }} />
       </div>
       <div className="flex flex-1 justify-end">
-        <JobDescriptionDialog />
+        <ReviewResumeDialog />
         <Suspense>
           <DownloadDialog />
         </Suspense>

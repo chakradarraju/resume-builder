@@ -1,11 +1,12 @@
 import { useProfile } from "@/app/ProfileContext";
-import Profile, { Part, SectionEnum, SectionItem } from "@/types/profile";
+import Profile, { Part, PartType, SectionEnum, SectionItem } from "@/types/profile";
 import EditableText from "./EditableText";
 import PartHoverMenu from "./PartHoverMenu";
 import { Tag } from "./ui/tag";
 import InnerPartHoverMenu from "./InnerPartHoverMenu";
 import { Editable } from "@chakra-ui/react"
 import { useState } from "react";
+import { getSection } from "@/lib/typeUtils";
 
 function listItemRemover(item: SectionItem, index: number) {
   let sectionItem = item as Part;
@@ -32,7 +33,7 @@ const GenericElement: React.FC<{ part: Part, section: SectionEnum, sectionIndex:
 
   function updatePart(update: object) {
     let newProfile = {...profile};
-    let sectionToUpdate = section === "SECTION1" ? newProfile.section1 : newProfile.section2;
+    let sectionToUpdate = getSection(newProfile, section);
     if (!sectionToUpdate) return;
     let sectionItem = sectionToUpdate[sectionIndex];
     sectionToUpdate[sectionIndex] = {...sectionItem, ...update};
@@ -41,7 +42,7 @@ const GenericElement: React.FC<{ part: Part, section: SectionEnum, sectionIndex:
 
   function updateList(idx: number, val: string) {
     let newProfile = {...profile};
-    let sectionToUpdate = section === "SECTION1" ? newProfile.section1 : newProfile.section2;
+    let sectionToUpdate = getSection(newProfile, section);
     if (!sectionToUpdate) return;
     let sectionItem = sectionToUpdate[sectionIndex] as Part;
     if (!sectionItem.list) return;
@@ -49,19 +50,19 @@ const GenericElement: React.FC<{ part: Part, section: SectionEnum, sectionIndex:
     setProfile(newProfile);
   }
 
-  if ((part.type === "LIST" || part.type === "CHIPS") && !part.list) part.list = [''];
+  if ((part.type === PartType.List || part.type === PartType.Chips) && !part.list) part.list = [''];
 
   return (<div className="relative group/i break-inside-avoid-page">
     <PartHoverMenu section={section} sectionIndex={sectionIndex} />
     <EditableText placeholder="Heading" value={part.heading} className="text-2xl" onChange={ele => updatePart({heading: ele.target.value})} />
-    {part.type === "TEXT" && <EditableText placeholder="Description" multiline value={part.text} onChange={ele => updatePart({text: ele.target.value})} />}
-    {part.type === "LIST" && <ul className="list-disc">
+    {part.type === PartType.Text && <EditableText placeholder="Description" multiline value={part.text} onChange={ele => updatePart({text: ele.target.value})} />}
+    {part.type === PartType.List && <ul className="list-disc">
       {part.list?.map((i, idx) => <li key={idx} className="relative group/ii ml-6">
         <InnerPartHoverMenu section={section} sectionIndex={sectionIndex} idx={idx} len={part.list?.length || 0} adder={listItemAdder} remover={listItemRemover} swapper={listItemSwapper}/>
         <EditableText placeholder="..." value={i} className="h-6" onChange={ele => updateList(idx, ele.target.value)} />
       </li>)}
     </ul>}
-    {part.type === "CHIPS" && <div>
+    {part.type === PartType.Chips && <div>
       {part.list?.map((listItem, tagIndex) => <span className="relative inline-block mx-1 my-1 hover:min-w-20 group/ii" key={tagIndex}><Tag variant="outline">
         <InnerPartHoverMenu section={section} sectionIndex={sectionIndex} idx={tagIndex} len={part.list?.length || 0} adder={listItemAdder} remover={listItemRemover} swapper={listItemSwapper} onTag={true} />
         <Editable.Root textAlign="start" value={listItem || ''} placeholder="..." onValueChange={e => updateList(tagIndex, e.value)}>

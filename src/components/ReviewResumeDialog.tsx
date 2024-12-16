@@ -12,9 +12,9 @@ import {
 } from "@/components/ui/dialog";
 import { Button, Input, Textarea } from "@chakra-ui/react";
 import { useState } from "react";
-import { HiOutlineBriefcase } from "react-icons/hi2";
+import { HiOutlineAnnotation } from "react-icons/hi";
 
-const JobDescriptionDialog: React.FC<{}> = () => {
+const ReviewResumeDialog: React.FC<{}> = () => {
   const [url, setUrl] = useState('');
   const [fetchedJD, setFetchedJD] = useState('');
   const {setJobDescription} = useConfig();
@@ -30,7 +30,7 @@ const JobDescriptionDialog: React.FC<{}> = () => {
   return (<DialogRoot lazyMount open={open} onOpenChange={e => setOpen(e.open)}>
     <DialogBackdrop />
     <DialogTrigger asChild>
-      <Button colorPalette="orange" className="mx-2" color="white"><HiOutlineBriefcase /> Fetch job description</Button>
+      <Button colorPalette="green" className="mx-2" color="white"><HiOutlineAnnotation /> Review Resume</Button>
     </DialogTrigger>
     <DialogContent color="black" className="max-h-fit">
       <DialogCloseTrigger />
@@ -52,4 +52,4 @@ const JobDescriptionDialog: React.FC<{}> = () => {
   </DialogRoot>);
 }
 
-export default JobDescriptionDialog;
+export default ReviewResumeDialog;

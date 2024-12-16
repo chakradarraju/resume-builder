@@ -6,6 +6,7 @@ import { useProfile } from "@/app/ProfileContext";
 import PartHoverMenu from "./PartHoverMenu";
 import InnerPartHoverMenu from "./InnerPartHoverMenu";
 import { fillBullet } from "@/lib/uiutils/fillBullet";
+import { getSection } from "@/lib/typeUtils";
 
 function remover(item: SectionItem, index: number) {
   let sectionItem = item as Experience;
@@ -27,7 +28,7 @@ const ExperienceElement: React.FC<{ experience: Experience, section: SectionEnum
 
   function updateExperience(experienceIndex: number, update: object) {
     let newProfile = {...profile};
-    let sectionToUpdate = section === "SECTION1" ? newProfile.section1 : newProfile.section2;
+    let sectionToUpdate = getSection(newProfile, section);
     if (!sectionToUpdate) return;
     let sectionItem = sectionToUpdate[sectionIndex] as Experience;
     let exp = sectionItem.experiences[experienceIndex];
@@ -48,11 +49,11 @@ const ExperienceElement: React.FC<{ experience: Experience, section: SectionEnum
         </TimelineConnector>
         <TimelineContent className="pb-0 gap-0 -m-1">
           <TimelineTitle className="flex">
-            <EditableText placeholder="Company" value={e.company} className="text-lg text-blue-400 font-bold leading-none h-8" onChange={eve => updateExperience(idx, {company: eve.target.value})} />
+            <EditableText placeholder="Company" value={e.role} className="text-lg text-blue-400 font-bold leading-none h-8" onChange={eve => updateExperience(idx, {role: eve.target.value})} />
           </TimelineTitle>
           <TimelineDescription className="flex flex-col text-black font-normal">
             <div className={`flex ${e.role || e.timeline ? '' : 'hidden group-hover/i:flex'}`}>
-              <EditableText placeholder="Role" value={e.role} className="h-6 font-bold" onChange={eve => updateExperience(idx, {role: eve.target.value})} />
+              <EditableText placeholder="Role" value={e.company} className="h-6 font-bold" onChange={eve => updateExperience(idx, {company: eve.target.value})} />
               <EditableText placeholder="Since - Until" value={e.timeline} className="w-1/4 text-right flex-initial h-6" onChange={eve => updateExperience(idx, {timeline: eve.target.value})} />
             </div>
             <div className={`${e.text ? '' : 'hidden group-hover/i:flex'}`}>
