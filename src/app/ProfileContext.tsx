@@ -10,6 +10,8 @@ interface ProfileContextType {
   setLayout: React.Dispatch<React.SetStateAction<LayoutEnum>>;
   jobDescription: string;
   setJobDescription: React.Dispatch<React.SetStateAction<string>>;
+  review: string;
+  setReview: React.Dispatch<React.SetStateAction<string>>;
   loading: boolean;
 }
 
@@ -24,6 +26,7 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [profile, setProfile] = useState<Profile>(EMPTY_PROFILE);
   const [layout, setLayout] = useState<LayoutEnum>(LayoutEnum.Split);
   const [jobDescription, setJobDescription] = useState<string>("");
+  const [review, setReview] = useState("");
   const [loading, setLoading] = useState<boolean>(true);
 
   const [unsavedChanges, setUnsavedChanges] = useState(false);
@@ -42,6 +45,7 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
           const conf = JSON.parse(storedConfig);
           setLayout(conf.layout);
           setJobDescription(conf.jd);
+          setReview(conf.review);
         }
         setLoading(false);
       } catch (error) {
@@ -75,12 +79,12 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
     };
     // Exclude saveProfileToLocalStorage from dependencies to avoid unnecessary calls
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profile, layout, jobDescription]);
+  }, [profile, layout, jobDescription, review]);
 
   const saveProfileToLocalStorage = useCallback(() => {
     try {
       if (typeof window !== 'undefined') {
-        const config = { layout, jd: jobDescription };
+        const config = { layout, jd: jobDescription, review };
         localStorage.setItem('profile', JSON.stringify(profile));
         localStorage.setItem('config', JSON.stringify(config));
         console.log('Profile saved to localStorage', config);
@@ -95,7 +99,7 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
     } catch (error) {
       console.error('Error saving profile to localStorage', error);
     }
-  }, [profile, layout, jobDescription, debounceTimer]);
+  }, [profile, layout, jobDescription, review, debounceTimer]);
 
   // Warn user before closing if there are unsaved changes
   useEffect(() => {
@@ -128,9 +132,11 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
       setLayout,
       jobDescription,
       setJobDescription,
+      review,
+      setReview,
       loading
     }),
-    [profile, unsavedChanges, saveProfileToLocalStorage, layout, jobDescription, loading]
+    [profile, unsavedChanges, saveProfileToLocalStorage, layout, jobDescription, review, loading]
   );
 
   return <ProfileContext.Provider value={value}>{children}</ProfileContext.Provider>;

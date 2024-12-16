@@ -13,15 +13,18 @@ import {
 import { Button, Input, Textarea } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { HiOutlineAnnotation } from "react-icons/hi";
+import Markdown from 'react-markdown';
 
 const ReviewResumeDialog: React.FC<{}> = () => {
   const [url, setUrl] = useState('');
   const [fetchedJD, setFetchedJD] = useState('');
-  const {jobDescription, setJobDescription} = useProfile();
+  const {profile, jobDescription, setJobDescription, review: reviewFromContext, setReview: setReviewInContext } = useProfile();
   const [open, setOpen] = useState(false);
+  const [review, setReview] = useState('');
 
   useEffect(() => {
     setFetchedJD(jobDescription);
+    setReview(reviewFromContext);
   }, [jobDescription]);
 
   async function fetchJobDescription() {
@@ -29,6 +32,23 @@ const ReviewResumeDialog: React.FC<{}> = () => {
     if (!response.ok) return;
     const body = await response.json();
     setFetchedJD(body.data);
+  }
+
+  async function reviewResumeForJD() {
+    setJobDescription(fetchedJD);
+    const formData = new FormData();
+    const profileWithoutPic = {...profile};
+    delete profileWithoutPic.picture;
+    formData.append("profile", JSON.stringify(profileWithoutPic));
+    formData.append("jd", fetchedJD);
+    const response = await fetch('/api/review', { method: 'POST', body: formData });
+    if (!response.ok) {
+      console.error('Unable to fetch review', response);
+      return;
+    }
+    const body = await response.json();
+    setReview(body.review);
+    setReviewInContext(body.review);
   }
 
   return (<DialogRoot lazyMount open={open} onOpenChange={e => setOpen(e.open)}>
@@ -41,18 +61,17 @@ const ReviewResumeDialog: React.FC<{}> = () => {
       <DialogHeader>
         <DialogTitle>Fetch job description</DialogTitle>
       </DialogHeader>
-      <DialogBody>
+      <DialogBody className="overflow-y-scroll">
         <div className="flex">
           <Input placeholder="Job description URL" value={url} onChange={e => setUrl(e.target.value)} />
           <Button onClick={fetchJobDescription}>Fetch JD</Button>
         </div>
         <Textarea placeholder="Job description" className="max-h-96 overflow-y-scroll" value={fetchedJD} onChange={e => setFetchedJD(e.target.value)} />
+        {review && <Markdown children={review} skipHtml />}
       </DialogBody>
       <DialogFooter>
-        <Button onClick={() => {
-          setJobDescription(fetchedJD);
-          setOpen(false);
-        }}>Review resume for JD</Button>
+        <Button onClick={() => reviewResumeForJD()}>Review resume for JD</Button>
+        <Button onClick={() => setOpen(false)}>Close</Button>
       </DialogFooter>
     </DialogContent>
   </DialogRoot>);

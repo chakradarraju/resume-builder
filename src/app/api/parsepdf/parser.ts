@@ -77,6 +77,8 @@ ${resumeText}
     temperature: 0,
   });
 
+  console.log('Usage', JSON.stringify(response.usage));
+
   // The API should return JSON that we can parse
   const content = response.choices[0].message?.content?.trim();
   if (!content) {

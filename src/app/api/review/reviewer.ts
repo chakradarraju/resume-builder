@@ -20,8 +20,11 @@ What are you suggestions to help them get selected?`
       messages: [
           {"role": "system", "content": systemPrompt},
           {"role": "user", "content": prompt}
-      ]
+      ],
+      temperature: 0
   });
+
+  console.log('Usage', JSON.stringify(response.usage));
 
   const content = response.choices[0].message?.content ?? '';
 
