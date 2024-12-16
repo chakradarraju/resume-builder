@@ -9,7 +9,7 @@ import {
   FileUploadRoot,
   FileUploadTrigger,
 } from "@/components/ui/file-upload"
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const Page: React.FC<{}> = () => {
   const {setProfile, setJobDescription} = useProfile();
@@ -31,6 +31,8 @@ const Page: React.FC<{}> = () => {
   const jdRef = useRef<HTMLTextAreaElement>(null);
   const roleRef = useRef<HTMLInputElement>(null);
   const resumeFileRef = useRef<HTMLInputElement>(null);
+
+  const router = useRouter();
   
   const [parsedProfile, setParsedProfile] = useState<Profile>(EMPTY_PROFILE);
 
@@ -84,13 +86,13 @@ const Page: React.FC<{}> = () => {
     } else {
       setJobDescription('');
     }
-    console.log('Before upload check');
-    if (baseDataTab === "upload" && parseResumeError.length === 0) {
+    console.log('before check');
+    if (baseDataTab === "upload" && parseResumeError.length === 0 || baseDataTab === "empty") {
       setProfile(parsedProfile);
       console.log(parsedProfile);
-      redirect('/builder');
+      router.push('/builder');
+      console.log('Pushed builder to router');
     }
-    console.log('Done check');
   }
 
   async function fetchJobDescription() {
