@@ -84,10 +84,13 @@ const Page: React.FC<{}> = () => {
     } else {
       setJobDescription('');
     }
+    console.log('Before upload check');
     if (baseDataTab === "upload" && parseResumeError.length === 0) {
       setProfile(parsedProfile);
+      console.log(parsedProfile);
       redirect('/builder');
     }
+    console.log('Done check');
   }
 
   async function fetchJobDescription() {

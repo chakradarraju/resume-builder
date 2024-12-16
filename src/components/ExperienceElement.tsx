@@ -40,7 +40,7 @@ const ExperienceElement: React.FC<{ experience: Experience, section: SectionEnum
 
   return (<div className="card relative group/i py-2 rounded-lg break-inside-avoid-page text-black">
     <PartHoverMenu section={section} sectionIndex={sectionIndex} />
-    <div className="text-2xl">Experiences</div>
+    <div className="text-2xl">Experience</div>
     <TimelineRoot variant="outline">
       {experience.experiences.map((e, idx) => <TimelineItem key={idx} className="relative group/ii">
         <InnerPartHoverMenu section={section} sectionIndex={sectionIndex} idx={idx} len={experience.experiences.length} adder={adder} remover={remover} swapper={swapper}/>

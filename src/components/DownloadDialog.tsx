@@ -11,10 +11,8 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useConfig } from "@/app/ConfigContext";
-import { FaDownload } from "react-icons/fa";
 import { useEffect } from "react";
 import type { default as PrintJS } from 'print-js';
-import { FaCircleDollarToSlot } from "react-icons/fa6";
 import { redirect, useSearchParams } from "next/navigation";
 import { useSession } from 'next-auth/react';
 import { useProfile } from "@/app/ProfileContext";
