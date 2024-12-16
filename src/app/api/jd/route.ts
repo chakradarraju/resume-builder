@@ -40,7 +40,7 @@ async function fetchUrlText(url: string): Promise<string> {
       return contentText;  
     }
   }
-  $('script, style').remove();
+  $('script, style, iframe').remove();
 
   const bodyText = $('body').text();
   console.log('Returning body text', bodyText.length, 'for url', url)

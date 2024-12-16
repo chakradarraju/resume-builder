@@ -6,12 +6,25 @@ interface ProfileContextType {
   setProfile: React.Dispatch<React.SetStateAction<Profile>>;
   unsavedChanges: boolean;
   saveProfileToLocalStorage: () => void;
+  layout: LayoutEnum;
+  setLayout: React.Dispatch<React.SetStateAction<LayoutEnum>>;
+  jobDescription: string;
+  setJobDescription: React.Dispatch<React.SetStateAction<string>>;
+  loading: boolean;
+}
+
+export enum LayoutEnum {
+  Single = "SINGLE",
+  Split = "SPLIT"
 }
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
 export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [profile, setProfile] = useState<Profile>(EMPTY_PROFILE);
+  const [layout, setLayout] = useState<LayoutEnum>(LayoutEnum.Split);
+  const [jobDescription, setJobDescription] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
 
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(null);
@@ -24,6 +37,13 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
         if (storedProfile) {
           setProfile(JSON.parse(storedProfile));
         }
+        const storedConfig = localStorage.getItem('config');
+        if (storedConfig) {
+          const conf = JSON.parse(storedConfig);
+          setLayout(conf.layout);
+          setJobDescription(conf.jd);
+        }
+        setLoading(false);
       } catch (error) {
         console.error('Error loading profile from localStorage', error);
       }
@@ -55,13 +75,15 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
     };
     // Exclude saveProfileToLocalStorage from dependencies to avoid unnecessary calls
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profile]);
+  }, [profile, layout, jobDescription]);
 
   const saveProfileToLocalStorage = useCallback(() => {
     try {
       if (typeof window !== 'undefined') {
+        const config = { layout, jd: jobDescription };
         localStorage.setItem('profile', JSON.stringify(profile));
-        console.log('Profile saved to localStorage');
+        localStorage.setItem('config', JSON.stringify(config));
+        console.log('Profile saved to localStorage', config);
         setUnsavedChanges(false);
 
         // Clear any existing debounce timer since we've saved manually
@@ -73,7 +95,7 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
     } catch (error) {
       console.error('Error saving profile to localStorage', error);
     }
-  }, [profile, debounceTimer]);
+  }, [profile, layout, jobDescription, debounceTimer]);
 
   // Warn user before closing if there are unsaved changes
   useEffect(() => {
@@ -102,8 +124,13 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
       setProfile,
       unsavedChanges,
       saveProfileToLocalStorage,
+      layout,
+      setLayout,
+      jobDescription,
+      setJobDescription,
+      loading
     }),
-    [profile, unsavedChanges, saveProfileToLocalStorage]
+    [profile, unsavedChanges, saveProfileToLocalStorage, layout, jobDescription, loading]
   );
 
   return <ProfileContext.Provider value={value}>{children}</ProfileContext.Provider>;

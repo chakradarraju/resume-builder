@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { reviewResume } from "./reviewer";
 import Profile from "@/types/profile";
 
-export function parseProfile(str: string): Profile | NextResponse {
+function parseProfile(str: string): Profile | NextResponse {
   try {
     return JSON.parse(str);
   } catch(e) {
@@ -11,7 +11,7 @@ export function parseProfile(str: string): Profile | NextResponse {
   }
 }
 
-export async function POST(req: NextRequest): Promise<NextResponse> {
+export async function POST(req: NextRequest) {
   const formData = await req.formData();
   const profileStr = formData.get("profile") as string;
   const jobDescription = formData.get("jd") as string;

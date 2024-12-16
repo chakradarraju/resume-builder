@@ -11,11 +11,23 @@ Given the following resume text, extract the candidate's profile and format it a
 
 Interfaces:
 \`\`\`typescript
+enum PartType {
+  Text = "TEXT",
+  List = "LIST",
+  Chips = "CHIPS"
+}
+
+type SectionItem = (Experience | Education | Part);
+
 interface Part {
-  type: "TEXT" | "LIST" | "CHIPS",
+  type: PartType,
   heading?: string,
   text?: string,
   list?: string[],
+}
+
+interface Experience {
+  experiences: ExperiencePart[]
 }
 
 interface ExperiencePart {
@@ -25,8 +37,8 @@ interface ExperiencePart {
   text?: string,
 }
 
-interface Experience {
-  experiences: ExperiencePart[]
+interface Education {
+  course: CoursePart[],
 }
 
 interface CoursePart {
@@ -35,12 +47,6 @@ interface CoursePart {
   degree?: string,
   text?: string,
 }
-
-interface Education {
-  course: CoursePart[],
-}
-
-export type SectionItem = (Experience | Education | Part);
 
 interface Profile {
   name?: string,

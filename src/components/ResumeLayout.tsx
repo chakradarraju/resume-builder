@@ -5,8 +5,15 @@ import EducationElement from "@/components/EducationElement";
 import ExperienceElement from "@/components/ExperienceElement";
 import GenericElement from "@/components/GenericElement";
 import ProfileEditor from "@/types/profileEditor";
-import { LayoutEnum, useConfig } from "@/app/ConfigContext";
+import { useConfig } from "@/app/ConfigContext";
 import { isEducation, isExperience } from "@/types/typeChecks";
+import { useProfile, LayoutEnum } from "@/app/ProfileContext";
+import { HStack, Stack } from "@chakra-ui/react"
+import {
+  Skeleton,
+  SkeletonCircle,
+  SkeletonText,
+} from "@/components/ui/skeleton"
 
 export function render(p: SectionItem, idx: number, section: SectionEnum) {
   if (isExperience(p)) return <ExperienceElement key={idx} experience={p} section={section} sectionIndex={idx} id={`${section}-${idx}`} />;
@@ -15,7 +22,16 @@ export function render(p: SectionItem, idx: number, section: SectionEnum) {
 }
 
 const ResumeLayout: React.FC<ProfileEditor> = ({ profile, setProfile }) => {
-  const { layout, printMode, creditsRemaining } = useConfig();
+  const { printMode, creditsRemaining } = useConfig();
+  const { layout, loading } = useProfile();
+
+  if (loading) return (<Stack gap={10} maxW="full">
+    <HStack width="full">
+      <SkeletonCircle size={56} className="m-2" />
+      <SkeletonText noOfLines={2} />
+    </HStack>
+    <Skeleton height="500px" />
+  </Stack>);
 
   return (<div className="flex flex-col relative">
     {printMode && creditsRemaining === 0 && <span className="absolute top-0 right-0">Resume generated using <a className="underline text-blue-500" href="https://www.resumesgenie.com/">ResumesGenie</a></span>}

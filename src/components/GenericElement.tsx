@@ -23,9 +23,7 @@ function listItemAdder(item: SectionItem, index: number) {
 function listItemSwapper(item: SectionItem, idx: number, targetIdx: number) {
   let sectionItem = item as Part;
   if (!sectionItem.list) return;
-  console.log('Swapping', sectionItem.list, idx, targetIdx);
   [sectionItem.list[idx], sectionItem.list[targetIdx]] = [sectionItem.list[targetIdx], sectionItem.list[idx]];
-  console.log('After swap', sectionItem.list);
 }
 
 const GenericElement: React.FC<{ part: Part, section: SectionEnum, sectionIndex: number, id: string }> = ({ part, section, sectionIndex, id }) => {

@@ -4,7 +4,9 @@ export enum SectionEnum {
 };
 
 export enum PartType {
-  Text, List, Chips
+  Text = "TEXT",
+  List = "LIST",
+  Chips = "CHIPS"
 }
 
 export type SectionItem = (Experience | Education | Part);

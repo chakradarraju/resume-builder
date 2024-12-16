@@ -9,8 +9,7 @@ import {
 import { Button } from "@chakra-ui/react";
 import { FaGripHorizontal } from "react-icons/fa";
 import { HiMiniQueueList, HiOutlineDocument, HiOutlineDocumentArrowDown, HiOutlineDocumentArrowUp, HiOutlineDocumentCheck } from "react-icons/hi2";
-import { useProfile } from '../app/ProfileContext';
-import { LayoutEnum, useConfig } from "@/app/ConfigContext";
+import { useProfile, LayoutEnum } from '@/app/ProfileContext';
 import Profile, { EMPTY_PROFILE, PartType, SectionItem } from "@/types/profile";
 import { BsWindowFullscreen, BsWindowSidebar } from "react-icons/bs";
 import { Separator } from "@chakra-ui/react/separator";
@@ -71,8 +70,7 @@ const AddButton: React.FC<{ icon: ReactNode, onAdd: (t: SectionItem) => void, al
 
 
 const Header: React.FC<{}> = () => {
-  const { profile, setProfile, unsavedChanges, saveProfileToLocalStorage } = useProfile();
-  const { layout, setLayout } = useConfig();
+  const { profile, setProfile, unsavedChanges, saveProfileToLocalStorage, layout, setLayout } = useProfile();
   const loadProfileInput = useRef<HTMLInputElement>(null);
 
   async function handleLoadProfile(event: ChangeEvent<HTMLInputElement>) {

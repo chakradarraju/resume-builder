@@ -2,7 +2,6 @@
 import { Button, Grid, GridItem, Input, Tabs, Text, Textarea } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import { HiUpload } from "react-icons/hi";
-import { useConfig } from "../ConfigContext";
 import { useProfile } from "../ProfileContext";
 import Profile, { EMPTY_PROFILE } from "@/types/profile";
 import { Field } from "@/components/ui/field";
@@ -13,8 +12,7 @@ import {
 import { redirect } from "next/navigation";
 
 const Page: React.FC<{}> = () => {
-  const {setJobDescription} = useConfig();
-  const {setProfile} = useProfile();
+  const {setProfile, setJobDescription} = useProfile();
 
   const [stage, setStage] = useState('context');
   
@@ -28,7 +26,6 @@ const Page: React.FC<{}> = () => {
 
   const [JDError, setJDError] = useState('');
   const [roleError, setRoleError] = useState('');
-  const [validResume, setValidResume] = useState(false);
   const [parseResumeError, setParseResumeError] = useState('');
 
   const jdRef = useRef<HTMLTextAreaElement>(null);

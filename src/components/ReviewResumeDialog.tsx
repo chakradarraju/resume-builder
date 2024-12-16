@@ -1,4 +1,4 @@
-import { useConfig } from "@/app/ConfigContext";
+import { useProfile } from "@/app/ProfileContext";
 import {
   DialogBackdrop,
   DialogBody,
@@ -11,14 +11,18 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button, Input, Textarea } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HiOutlineAnnotation } from "react-icons/hi";
 
 const ReviewResumeDialog: React.FC<{}> = () => {
   const [url, setUrl] = useState('');
   const [fetchedJD, setFetchedJD] = useState('');
-  const {setJobDescription} = useConfig();
+  const {jobDescription, setJobDescription} = useProfile();
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    setFetchedJD(jobDescription);
+  }, [jobDescription]);
 
   async function fetchJobDescription() {
     const response = await fetch('/api/jd', { method: 'POST', body: JSON.stringify({ url })});
@@ -38,15 +42,17 @@ const ReviewResumeDialog: React.FC<{}> = () => {
         <DialogTitle>Fetch job description</DialogTitle>
       </DialogHeader>
       <DialogBody>
-        <Input placeholder="Job description URL" value={url} onChange={e => setUrl(e.target.value)} />
+        <div className="flex">
+          <Input placeholder="Job description URL" value={url} onChange={e => setUrl(e.target.value)} />
+          <Button onClick={fetchJobDescription}>Fetch JD</Button>
+        </div>
         <Textarea placeholder="Job description" className="max-h-96 overflow-y-scroll" value={fetchedJD} onChange={e => setFetchedJD(e.target.value)} />
       </DialogBody>
       <DialogFooter>
-        <Button onClick={fetchJobDescription}>Fetch</Button>
         <Button onClick={() => {
           setJobDescription(fetchedJD);
           setOpen(false);
-        }}>Looks good</Button>
+        }}>Review resume for JD</Button>
       </DialogFooter>
     </DialogContent>
   </DialogRoot>);
