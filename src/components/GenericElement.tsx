@@ -32,6 +32,12 @@ function bulletToggle(items: SectionItem[], idx: number) {
   sectionItem.showBullets = !sectionItem.showBullets;
 }
 
+function toggleListType(items: SectionItem[], idx: number) {
+  let sectionItem = items[idx] as Part;
+  if (sectionItem.type === PartType.List) sectionItem.type = PartType.Chips;
+  else if (sectionItem.type === PartType.Chips) sectionItem.type = PartType.List;
+}
+
 const GenericElement: React.FC<{ part: Part, section: SectionEnum, sectionIndex: number, id: string }> = ({ part, section, sectionIndex, id }) => {
   const { profile, setProfile } = useProfile();
 
@@ -57,7 +63,7 @@ const GenericElement: React.FC<{ part: Part, section: SectionEnum, sectionIndex:
   if ((part.type === PartType.List || part.type === PartType.Chips) && !part.list) part.list = [''];
 
   return (<div className="relative group/i break-inside-avoid-page">
-    <PartHoverMenu section={section} sectionIndex={sectionIndex} bulletToggle={part.type === PartType.List ? bulletToggle : undefined} showBullets={part.showBullets} />
+    <PartHoverMenu section={section} sectionIndex={sectionIndex} bulletToggle={part.type === PartType.List ? bulletToggle : undefined} showBullets={part.showBullets} toggleListType={part.type === PartType.List || part.type === PartType.Chips ? toggleListType : undefined} partType={part.type} />
     <EditableText placeholder="Heading" value={part.heading} className="text-2xl" onChange={ele => updatePart({heading: ele.target.value})} />
     {part.type === PartType.Text && <EditableText placeholder="Description" multiline value={part.text} onChange={ele => updatePart({text: ele.target.value})} />}
     {part.type === PartType.List && <ul className={`${part.showBullets ? 'list-disc' : ''}`}>
