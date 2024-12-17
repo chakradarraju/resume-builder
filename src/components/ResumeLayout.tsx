@@ -21,9 +21,9 @@ export function render(p: SectionItem, idx: number, section: SectionEnum) {
   return <GenericElement key={idx} part={p} section={section} sectionIndex={idx} id={`${section}-${idx}`} />;
 }
 
-const ResumeLayout: React.FC<ProfileEditor> = ({ profile, setProfile }) => {
+const ResumeLayout: React.FC<{}> = () => {
   const { printMode, creditsRemaining } = useConfig();
-  const { layout, loading } = useProfile();
+  const { profile, setProfile, layout, loading, includePhoto } = useProfile();
 
   if (loading) return (<Stack gap={10} maxW="full">
     <HStack width="full">
@@ -36,7 +36,7 @@ const ResumeLayout: React.FC<ProfileEditor> = ({ profile, setProfile }) => {
   return (<div className="flex flex-col relative">
     {printMode && creditsRemaining === 0 && <span className="absolute top-0 right-0">Resume generated using <a className="underline text-blue-500" href="https://www.resumesgenie.com/">ResumesGenie</a></span>}
     <div className="flex mx-4">
-      <ProfilePic profile={profile} setProfile={setProfile} />
+      {includePhoto && <ProfilePic />}
       <div className="px-8 my-auto w-3/4">
         <EditableText placeholder="Your Name" className="text-5xl print:text-5xl text-blue-400 font-bold h-16" style={{textSize: '48px'}} value={profile.name} onChange={e => setProfile({...profile, name: e.target.value})} />
         <EditableText placeholder="Your designation" className="uppercase font-bold" value={profile.role} onChange={e => setProfile({...profile, role: e.target.value })} />

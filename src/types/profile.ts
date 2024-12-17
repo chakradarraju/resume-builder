@@ -44,7 +44,6 @@ export interface CoursePart {
 export interface Profile {
   name?: string,
   role?: string,
-  picture?: string,
   section1: SectionItem[],
   section2: SectionItem[],
 }
@@ -52,10 +51,8 @@ export interface Profile {
 export const EMPTY_PROFILE: Profile = {
   name: '',
   role: '',
-  picture: '',
   section1: [{type: PartType.Text, heading: 'About me'}, {type: PartType.List, heading: 'Contacts'}],
   section2: [{experiences:[]}, {course:[]}, {type: PartType.List, heading: 'Skills'}]
 };
-
 
 export default Profile;

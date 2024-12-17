@@ -10,7 +10,7 @@ import { Button } from "@chakra-ui/react";
 import { FaGripHorizontal } from "react-icons/fa";
 import { HiMiniQueueList, HiOutlineDocument, HiOutlineDocumentArrowDown, HiOutlineDocumentArrowUp, HiOutlineDocumentCheck } from "react-icons/hi2";
 import { useProfile, LayoutEnum } from '@/app/ProfileContext';
-import Profile, { EMPTY_PROFILE, PartType, SectionItem } from "@/types/profile";
+import Profile, { PartType, SectionItem } from "@/types/profile";
 import { BsWindowFullscreen, BsWindowSidebar } from "react-icons/bs";
 import { Separator } from "@chakra-ui/react/separator";
 import { PopoverArrow, PopoverBody, PopoverContent, PopoverRoot, PopoverTrigger } from "./ui/popover";
@@ -22,11 +22,14 @@ import { GrList, GrTextAlignFull } from "react-icons/gr";
 import { MdOutlineWork } from "react-icons/md";
 import { RiGraduationCapFill } from "react-icons/ri";
 import DownloadDialog from "./DownloadDialog";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import ReviewResumeDialog from "./ReviewResumeDialog";
-import { HiOutlineLogout } from "react-icons/hi";
+import { HiOutlineLogin, HiOutlineLogout } from "react-icons/hi";
+import { useRouter } from "next/navigation";
+import { Switch } from "@/components/ui/switch";
 
 const LayoutButton: React.FC<{layout: LayoutEnum, setLayout: React.Dispatch<React.SetStateAction<LayoutEnum>>}> = ({layout, setLayout}) => {
+  const {includePhoto, setIncludePhoto} = useProfile();
   return (<div className="flex">
     <PopoverRoot positioning={{ placement: "bottom" }}>
       <PopoverTrigger asChild>
@@ -36,7 +39,8 @@ const LayoutButton: React.FC<{layout: LayoutEnum, setLayout: React.Dispatch<Reac
       </PopoverTrigger>
       <PopoverContent>
         <PopoverArrow />
-        <PopoverBody>
+        <PopoverBody className="text-center">
+          <Switch colorPalette="blue" checked={includePhoto} defaultChecked onCheckedChange={e => setIncludePhoto(e.checked)} color="black" className="mb-4">Include photo</Switch>
           <SegmentedControl value={layout} onValueChange={({value}: {value: LayoutEnum}) => setLayout(value) } items={[
             { value: LayoutEnum.Single, label: <HStack><BsWindowFullscreen /> Classic layout</HStack> },
             { value: LayoutEnum.Split, label: <HStack><BsWindowSidebar /> Split layout</HStack>}]} />
@@ -70,8 +74,10 @@ const AddButton: React.FC<{ icon: ReactNode, onAdd: (t: SectionItem) => void, al
 
 
 const Header: React.FC<{}> = () => {
+  const router = useRouter();
   const { profile, setProfile, unsavedChanges, saveProfileToLocalStorage, layout, setLayout } = useProfile();
   const loadProfileInput = useRef<HTMLInputElement>(null);
+  const { data: session, status } = useSession();
 
   async function handleLoadProfile(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.files && event.target.files[0]) {
@@ -81,9 +87,7 @@ const Header: React.FC<{}> = () => {
   }
 
   function downloadProfile() {
-    const profileWithoutPic = {...profile};
-    delete profileWithoutPic.picture;
-    const data = JSON.stringify(profileWithoutPic, null, 2);
+    const data = JSON.stringify(profile, null, 2);
     const blob = new Blob([data], { type: 'application/json' });
     const fileUrl = URL.createObjectURL(blob);
     const downloadLink = document.createElement('a');
@@ -101,11 +105,12 @@ const Header: React.FC<{}> = () => {
         <HiMiniQueueList /> 
       </MenuTrigger>
       <MenuContent>
-        <MenuItem onClick={() => setProfile(EMPTY_PROFILE)} value="clear"><HiOutlineDocument />Clear resume</MenuItem>
-        <MenuItem onClick={() => saveProfileToLocalStorage()} value="save" disabled={!unsavedChanges}><HiOutlineDocumentCheck />{unsavedChanges ? 'Save changes' : 'Already saved'}</MenuItem>
-        <MenuItem onClick={() => downloadProfile()} value="download"><HiOutlineDocumentArrowDown />Download resume data</MenuItem>
-        <MenuItem onClick={() => loadProfileInput.current?.click()} value="load"><HiOutlineDocumentArrowUp />Load profile</MenuItem>
-        <MenuItem onClick={() => signOut()} value="signout"><HiOutlineLogout />Sign out</MenuItem>
+        <MenuItem onClick={() => router.push('/new')} value="clear"><HiOutlineDocument /> New resume</MenuItem>
+        <MenuItem onClick={() => saveProfileToLocalStorage()} value="save" disabled={!unsavedChanges}><HiOutlineDocumentCheck /> {unsavedChanges ? 'Save changes' : 'Already saved'}</MenuItem>
+        <MenuItem onClick={() => downloadProfile()} value="download"><HiOutlineDocumentArrowDown /> Download resume data</MenuItem>
+        <MenuItem onClick={() => loadProfileInput.current?.click()} value="load"><HiOutlineDocumentArrowUp /> Load profile</MenuItem>
+        {session?.user?.email && <MenuItem onClick={() => signOut()} value="signout"><HiOutlineLogout /> Sign out</MenuItem>}
+        {!session?.user?.email && <MenuItem onClick={() => router.push('/login')} value="signin"><HiOutlineLogin /> Sign in</MenuItem>}
       </MenuContent>
     </MenuRoot>)
   }

@@ -12,13 +12,14 @@ import {
 import { useRouter } from "next/navigation";
 
 const Page: React.FC<{}> = () => {
-  const {setProfile, setJobDescription} = useProfile();
+  const {setProfile, setPicture, setJobDescription} = useProfile();
 
   const [stage, setStage] = useState('context');
   
   const [contextTab, setContextTab] = useState('jd');
   const [baseDataTab, setBaseDataTab] = useState('upload');
   
+  const [name, setName] = useState('');
   const [url, setUrl] = useState('');
   const [fetchedJD, setFetchedJD] = useState('');
   const [role, setRole] = useState('');
@@ -27,6 +28,7 @@ const Page: React.FC<{}> = () => {
   const [JDError, setJDError] = useState('');
   const [roleError, setRoleError] = useState('');
   const [parseResumeError, setParseResumeError] = useState('');
+  const [nameErrorText, setNameErrorText] = useState('');
 
   const jdRef = useRef<HTMLTextAreaElement>(null);
   const roleRef = useRef<HTMLInputElement>(null);
@@ -86,11 +88,15 @@ const Page: React.FC<{}> = () => {
     } else {
       setJobDescription('');
     }
-    console.log('before check');
+    if (name.length === 0) {
+      setNameErrorText("Name can't be empty");
+      return;
+    }
     if (baseDataTab === "upload" && parseResumeError.length === 0 || baseDataTab === "empty") {
+      setPicture(null);
       setProfile(parsedProfile);
       console.log(parsedProfile);
-      router.push('/builder');
+      router.push(`/builder/${name}`);
       console.log('Pushed builder to router');
     }
   }
@@ -170,6 +176,11 @@ const Page: React.FC<{}> = () => {
         </Tabs.Content>
       </Tabs.Root>
       <Grid templateColumns="repeat(2, 1fr)" gap={2}>
+        <GridItem colSpan={2}>
+          <Field invalid={!!nameErrorText} errorText={nameErrorText}>
+            <Input placeholder="name" className="mt-2" value={name} onChange={e => setName(e.target.value)} />
+          </Field>
+        </GridItem>
         <GridItem>
           <Button className="w-full" onClick={() => setStage('context')}>Back</Button>
         </GridItem>

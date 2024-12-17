@@ -2,6 +2,8 @@ import React, { createContext, useEffect, useState, useCallback, useMemo, useCon
 import Profile, { EMPTY_PROFILE } from '@/types/profile';
 
 interface ProfileContextType {
+  name: string | null;
+  setName: React.Dispatch<React.SetStateAction<string | null>>;
   profile: Profile;
   setProfile: React.Dispatch<React.SetStateAction<Profile>>;
   unsavedChanges: boolean;
@@ -12,6 +14,10 @@ interface ProfileContextType {
   setJobDescription: React.Dispatch<React.SetStateAction<string>>;
   review: string;
   setReview: React.Dispatch<React.SetStateAction<string>>;
+  includePhoto: boolean;
+  setIncludePhoto: React.Dispatch<React.SetStateAction<boolean>>;
+  picture: string | null;
+  setPicture: React.Dispatch<React.SetStateAction<string | null>>;
   loading: boolean;
 }
 
@@ -23,29 +29,42 @@ export enum LayoutEnum {
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
 export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [name, setName] = useState<string | null>(null);
   const [profile, setProfile] = useState<Profile>(EMPTY_PROFILE);
   const [layout, setLayout] = useState<LayoutEnum>(LayoutEnum.Split);
   const [jobDescription, setJobDescription] = useState<string>("");
   const [review, setReview] = useState("");
+  const [picture, setPicture] = useState<string | null>(null);
+  const [includePhoto, setIncludePhoto] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(true);
 
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(null);
 
+  function nameSuffix() {
+    return name ? ('/' + name) : '';
+  }
+
   // Load profile from localStorage on initial mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
       try {
-        const storedProfile = localStorage.getItem('profile');
+        const suffix = nameSuffix();
+        const storedProfile = localStorage.getItem('profile' + suffix);
         if (storedProfile) {
           setProfile(JSON.parse(storedProfile));
         }
-        const storedConfig = localStorage.getItem('config');
+        const storedPicture = localStorage.getItem('picture' + suffix);
+        if (storedPicture) {
+          setPicture(storedPicture);
+        }
+        const storedConfig = localStorage.getItem('config' + suffix);
         if (storedConfig) {
           const conf = JSON.parse(storedConfig);
           setLayout(conf.layout);
           setJobDescription(conf.jd);
           setReview(conf.review);
+          setIncludePhoto(conf.includePhoto ?? true);
         }
         setLoading(false);
       } catch (error) {
@@ -84,9 +103,16 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const saveProfileToLocalStorage = useCallback(() => {
     try {
       if (typeof window !== 'undefined') {
-        const config = { layout, jd: jobDescription, review };
-        localStorage.setItem('profile', JSON.stringify(profile));
-        localStorage.setItem('config', JSON.stringify(config));
+        const config = {
+          layout,
+          jd: jobDescription,
+          review,
+          includePhoto
+        };
+        const suffix = nameSuffix();
+        localStorage.setItem('profile' + suffix, JSON.stringify(profile));
+        if (picture) localStorage.setItem('picture' + suffix, picture);
+        localStorage.setItem('config' + suffix, JSON.stringify(config));
         console.log('Profile saved to localStorage', config);
         setUnsavedChanges(false);
 
@@ -124,6 +150,8 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const value = useMemo(
     () => ({
+      name,
+      setName,
       profile,
       setProfile,
       unsavedChanges,
@@ -134,9 +162,13 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
       setJobDescription,
       review,
       setReview,
+      includePhoto,
+      setIncludePhoto,
+      picture,
+      setPicture,
       loading
     }),
-    [profile, unsavedChanges, saveProfileToLocalStorage, layout, jobDescription, review, loading]
+    [name, profile, unsavedChanges, saveProfileToLocalStorage, layout, jobDescription, review, includePhoto, picture, loading]
   );
 
   return <ProfileContext.Provider value={value}>{children}</ProfileContext.Provider>;

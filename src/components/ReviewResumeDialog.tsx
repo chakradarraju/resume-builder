@@ -37,9 +37,7 @@ const ReviewResumeDialog: React.FC<{}> = () => {
   async function reviewResumeForJD() {
     setJobDescription(fetchedJD);
     const formData = new FormData();
-    const profileWithoutPic = {...profile};
-    delete profileWithoutPic.picture;
-    formData.append("profile", JSON.stringify(profileWithoutPic));
+    formData.append("profile", JSON.stringify(profile));
     formData.append("jd", fetchedJD);
     const response = await fetch('/api/review', { method: 'POST', body: formData });
     if (!response.ok) {
