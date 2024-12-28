@@ -54,7 +54,7 @@ const EditableText: React.FC<{placeholder?: string, className?: string, value?: 
     if (type === TextType.Email) return (<div onClick={() => setEditing(true)}><a href={`mailto:${value}`} onClick={e => e.preventDefault()}>{value}</a></div>);
     if (type === TextType.Link) return (<div onClick={() => setEditing(true)}><a href={value} onClick={e => e.preventDefault()}>{getTitle(value) ?? value}</a></div>);  
   }
-  return <Input placeholder={placeholder} className={`${EDITABLE_TEXT_CLASS} ${className || ''}`} value={value || ''} onChange={onChange} onBlur={() => setEditing(false)} style={style} ref={inputRef} />
+  return <Input placeholder={placeholder} className={`${EDITABLE_TEXT_CLASS} ${className || ''}`} value={value || ''} onChange={e => { setEditing(true); if (onChange) onChange(e) }} onBlur={() => setEditing(false)} style={style} ref={inputRef} />
 }
 
 export default EditableText;

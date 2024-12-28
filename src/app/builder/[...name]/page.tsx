@@ -2,12 +2,21 @@
 
 import ResumeLayout from "@/components/ResumeLayout";
 import { useConfig } from "@/app/ConfigContext";
+import { useProfile } from "@/app/ProfileContext";
+import { useEffect } from "react";
+import { useParams } from "next/navigation";
 //import mixpanel from "mixpanel-browser";
 
 const FULLSTORY_ORG_ID = 'o-228D0K-na1';
 
 const Page: React.FC = () => {
   const {printMode} = useConfig();
+  const {setName} = useProfile();
+  const params = useParams<{ name: string; }>();
+
+  useEffect(() => {
+    setName(params.name);
+  }, []);
 
   // useEffect(() => {
   //   if (typeof window !== 'undefined') {

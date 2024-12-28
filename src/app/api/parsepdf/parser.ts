@@ -63,6 +63,9 @@ Try to map them logically:
 If something doesn't fit perfectly, make a reasonable assumption.
 
 Ensure the JSON is strictly following the above interfaces. Include all relevant information.
+Make sure type field in Part is one of the PartType enum values.
+Make sure to include heading in heading field for text parts.
+Contacts should ideally be list, include link target instead of just text.
   
 Resume Text:
 ${resumeText}

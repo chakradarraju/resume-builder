@@ -21,6 +21,8 @@ const ReviewResumeDialog: React.FC<{}> = () => {
   const {profile, jobDescription, setJobDescription, review: reviewFromContext, setReview: setReviewInContext } = useProfile();
   const [open, setOpen] = useState(false);
   const [review, setReview] = useState('');
+  const [reviewing, setReviewing] = useState(false);
+  const [fetchingJD, setFetchingJD] = useState(false);
 
   useEffect(() => {
     setFetchedJD(jobDescription);
@@ -28,7 +30,9 @@ const ReviewResumeDialog: React.FC<{}> = () => {
   }, [jobDescription]);
 
   async function fetchJobDescription() {
+    setFetchingJD(true);
     const response = await fetch('/api/jd', { method: 'POST', body: JSON.stringify({ url })});
+    setFetchingJD(false);
     if (!response.ok) return;
     const body = await response.json();
     setFetchedJD(body.data);
@@ -39,7 +43,9 @@ const ReviewResumeDialog: React.FC<{}> = () => {
     const formData = new FormData();
     formData.append("profile", JSON.stringify(profile));
     formData.append("jd", fetchedJD);
+    setReviewing(true);
     const response = await fetch('/api/review', { method: 'POST', body: formData });
+    setReviewing(false);
     if (!response.ok) {
       console.error('Unable to fetch review', response);
       return;
@@ -57,18 +63,21 @@ const ReviewResumeDialog: React.FC<{}> = () => {
     <DialogContent color="black" className="max-h-fit">
       <DialogCloseTrigger />
       <DialogHeader>
-        <DialogTitle>Fetch job description</DialogTitle>
+        <DialogTitle>Review resume</DialogTitle>
       </DialogHeader>
       <DialogBody className="overflow-y-scroll">
-        <div className="flex">
-          <Input placeholder="Job description URL" value={url} onChange={e => setUrl(e.target.value)} />
-          <Button onClick={fetchJobDescription}>Fetch JD</Button>
-        </div>
-        <Textarea placeholder="Job description" className="max-h-96 overflow-y-scroll" value={fetchedJD} onChange={e => setFetchedJD(e.target.value)} />
-        {review && <Markdown children={review} skipHtml />}
+        {!review && <div>
+          <div className="flex">
+            <Input placeholder="Job description URL" value={url} onChange={e => setUrl(e.target.value)} />
+            <Button disabled={fetchingJD} onClick={fetchJobDescription}>Fetch JD</Button>
+          </div>
+          <Textarea placeholder="Job description" className="max-h-96 overflow-y-scroll" value={fetchedJD} onChange={e => setFetchedJD(e.target.value)} />
+        </div>}
+        {review && <Markdown className="max-h-96" children={review} skipHtml />}
       </DialogBody>
       <DialogFooter>
-        <Button onClick={() => reviewResumeForJD()}>Review resume for JD</Button>
+        {!review && <Button disabled={reviewing} onClick={() => reviewResumeForJD()}>Review resume for JD</Button>}
+        {review && <Button onClick={() => setReview('')}>Start new review</Button>}
         <Button onClick={() => setOpen(false)}>Close</Button>
       </DialogFooter>
     </DialogContent>

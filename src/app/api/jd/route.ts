@@ -22,27 +22,30 @@ async function fetchUrlText(url: string): Promise<string> {
   $('p, div').each((i, el) => {
     $(el).append('\n');
   });
+  function ret(r: string) {
+    return r.replace(/\s*\n+/g, '\n').replace(/[ \t]+/g, ' ');
+  }
   const articleText = $('article').text();
   if (articleText.length > 0) {
     console.log('Returning article text', articleText.length, 'for url', url);
-    return articleText;
+    return ret(articleText);
   }
   const mainText = $('main').text();
   if (mainText.length > 0) {
     console.log('Returning main text', mainText.length, 'for url', url);
-    return mainText;
+    return ret(mainText);
   }
   const contentEls = $('.content');
   if (contentEls.length === 1) {
     const contentText = contentEls.text();
     if (contentText.length > 0) {
       console.log('Returning content text', contentText.length, 'for url', url);
-      return contentText;  
+      return ret(contentText);  
     }
   }
   $('script, style, iframe').remove();
 
   const bodyText = $('body').text();
   console.log('Returning body text', bodyText.length, 'for url', url)
-  return bodyText;
+  return ret(bodyText);
 }

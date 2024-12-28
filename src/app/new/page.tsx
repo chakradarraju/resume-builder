@@ -7,12 +7,12 @@ import Profile, { EMPTY_PROFILE } from "@/types/profile";
 import { Field } from "@/components/ui/field";
 import {
   FileUploadRoot,
-  FileUploadTrigger,
-} from "@/components/ui/file-upload"
+  FileUploadTrigger
+} from "@/components/ui/file-upload";
 import { useRouter } from "next/navigation";
 
 const Page: React.FC<{}> = () => {
-  const {setProfile, setPicture, setJobDescription} = useProfile();
+  const {setProfile, setPicture, setJobDescription, setReview} = useProfile();
 
   const [stage, setStage] = useState('context');
   
@@ -26,9 +26,13 @@ const Page: React.FC<{}> = () => {
   const [company, setCompany] = useState('');
 
   const [JDError, setJDError] = useState('');
+  const [fetchingJD, setFetchingJD] = useState(false);
   const [roleError, setRoleError] = useState('');
   const [parseResumeError, setParseResumeError] = useState('');
   const [nameErrorText, setNameErrorText] = useState('');
+  const [parsingResume, setParsingResume] = useState(false);
+  const [successfullyParsedResume, setSuccessfullyParsedResume] = useState(false);
+  const [selectedFileName, setSelectedFileName] = useState('');
 
   const jdRef = useRef<HTMLTextAreaElement>(null);
   const roleRef = useRef<HTMLInputElement>(null);
@@ -58,11 +62,15 @@ const Page: React.FC<{}> = () => {
     const formData = new FormData();
     formData.append("file", file);
 
+    setParsingResume(true);
     const response = await fetch('/api/parsepdf', { method: 'POST', body: formData });
+    setParsingResume(false);
     if (!response.ok) {
+      setSuccessfullyParsedResume(false);
       const resp = await response.json().catch(console.error);
       setParseResumeError(resp?.error ?? 'Unknown error');
     } else {
+      setSuccessfullyParsedResume(true);
       const profile: Profile = await response.json();
       setParsedProfile(profile);  
     }
@@ -88,6 +96,7 @@ const Page: React.FC<{}> = () => {
     } else {
       setJobDescription('');
     }
+    setReview('');
     if (name.length === 0) {
       setNameErrorText("Name can't be empty");
       return;
@@ -102,7 +111,9 @@ const Page: React.FC<{}> = () => {
   }
 
   async function fetchJobDescription() {
+    setFetchingJD(true);
     const response = await fetch('/api/jd', { method: 'POST', body: JSON.stringify({ url })});
+    setFetchingJD(false);
     if (!response.ok) return;
     const body = await response.json();
     setFetchedJD(body.data);
@@ -127,7 +138,7 @@ const Page: React.FC<{}> = () => {
         <Tabs.Content value="jd">
           <div className="flex">
             <Input placeholder="Job description URL" value={url} onChange={e => setUrl(e.target.value)} />
-            <Button onClick={fetchJobDescription}>Fetch JD</Button>
+            <Button disabled={fetchingJD} onClick={fetchJobDescription}>Fetch JD</Button>
           </div>
           <Field invalid={!!JDError} errorText={JDError}>
             <Textarea placeholder="Job description" ref={jdRef} className="max-h-96 overflow-y-scroll" value={fetchedJD} onChange={e => { validateJD(); setFetchedJD(e.target.value) } } />
@@ -153,21 +164,22 @@ const Page: React.FC<{}> = () => {
           <Tabs.Trigger value="upload">
             Upload pdf
           </Tabs.Trigger>
-
           <Tabs.Trigger value="empty">
             Empty
           </Tabs.Trigger>
         </Tabs.List>
         <Tabs.Content value="upload">
-          <div className="flex">
-            <FileUploadRoot accept="application/pdf,application/json" invalid={parseResumeError.length > 0} ref={resumeFileRef}>
+          <div className="flex items-center">
+            <FileUploadRoot accept="application/pdf,application/json" invalid={parseResumeError.length > 0} ref={resumeFileRef} onFileAccept={file => { setParseResumeError(''); setSuccessfullyParsedResume(false); setSelectedFileName(file.files[0].name); }}>
               <FileUploadTrigger asChild>
                 <Button variant="outline" size="sm">
                   <HiUpload /> Upload resume
                 </Button>
               </FileUploadTrigger>
+              <Text>{selectedFileName}</Text>
+              {/* <FileUploadList /> */}
             </FileUploadRoot>
-            <Button onClick={() => validateResume()}>Process</Button>    
+            <Button disabled={parsingResume || successfullyParsedResume} onClick={() => validateResume()}>{successfullyParsedResume ? 'Processed' : 'Process'}</Button>    
           </div>        
         </Tabs.Content>
         <Tabs.Content value="role">
