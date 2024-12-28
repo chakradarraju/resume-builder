@@ -1,6 +1,6 @@
 'use client';
 import { Button, Grid, GridItem, Input, Tabs, Text, Textarea } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { HiUpload } from "react-icons/hi";
 import { useProfile } from "../ProfileContext";
 import Profile, { EMPTY_PROFILE } from "@/types/profile";
@@ -41,6 +41,12 @@ const Page: React.FC<{}> = () => {
   const router = useRouter();
   
   const [parsedProfile, setParsedProfile] = useState<Profile>(EMPTY_PROFILE);
+
+  const [savedResumes, setSavedResumes] = useState<string[]>([]);
+
+  useEffect(() => {
+    setSavedResumes(Object.keys(localStorage).filter(k => k.startsWith('profile/')).map(k => k.split('/')[1]));
+  }, []);
 
   function validateJD() {
     setJDError(fetchedJD.length > 9 ? '' : 'JD too short, it should be at least 10 characters');

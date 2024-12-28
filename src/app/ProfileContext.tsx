@@ -48,6 +48,7 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
   // Load profile from localStorage on initial mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
+      setLoading(true)
       try {
         const suffix = nameSuffix();
         const storedProfile = localStorage.getItem('profile' + suffix);
@@ -71,7 +72,7 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
         console.error('Error loading profile from localStorage', error);
       }
     }
-  }, []);
+  }, [name]);
 
   // Save profile to localStorage with debounce
   useEffect(() => {
@@ -98,7 +99,7 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
     };
     // Exclude saveProfileToLocalStorage from dependencies to avoid unnecessary calls
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profile, layout, jobDescription, review]);
+  }, [profile, picture, layout, jobDescription, review]);
 
   const saveProfileToLocalStorage = useCallback(() => {
     try {
@@ -111,7 +112,9 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
         };
         const suffix = nameSuffix();
         localStorage.setItem('profile' + suffix, JSON.stringify(profile));
-        if (picture) localStorage.setItem('picture' + suffix, picture);
+        if (picture !== null) {
+          localStorage.setItem('picture' + suffix, picture);
+        }
         localStorage.setItem('config' + suffix, JSON.stringify(config));
         console.log('Profile saved to localStorage', config);
         setUnsavedChanges(false);
@@ -125,7 +128,7 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({ child
     } catch (error) {
       console.error('Error saving profile to localStorage', error);
     }
-  }, [profile, layout, jobDescription, review, debounceTimer]);
+  }, [profile, picture, layout, jobDescription, review, debounceTimer]);
 
   // Warn user before closing if there are unsaved changes
   useEffect(() => {

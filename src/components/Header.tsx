@@ -5,6 +5,7 @@ import {
   MenuItem,
   MenuRoot,
   MenuTrigger,
+  MenuTriggerItem,
 } from "@/components/ui/menu";
 import { Button } from "@chakra-ui/react";
 import { FaGripHorizontal } from "react-icons/fa";
@@ -17,7 +18,7 @@ import { PopoverArrow, PopoverBody, PopoverContent, PopoverRoot, PopoverTrigger 
 import { SegmentedControl } from "./ui/segmented-control";
 import { HStack } from "@chakra-ui/react";
 import { PiColumnsPlusLeftBold, PiColumnsPlusRightBold, PiRowsPlusBottomBold, PiRowsPlusTopBold } from "react-icons/pi";
-import { ChangeEvent, ReactNode, Suspense, useRef } from "react";
+import { ChangeEvent, ReactNode, Suspense, use, useEffect, useRef, useState } from "react";
 import { GrList, GrTextAlignFull } from "react-icons/gr";
 import { MdOutlineWork } from "react-icons/md";
 import { RiGraduationCapFill } from "react-icons/ri";
@@ -78,6 +79,11 @@ const Header: React.FC<{}> = () => {
   const { profile, setProfile, unsavedChanges, saveProfileToLocalStorage, layout, setLayout } = useProfile();
   const loadProfileInput = useRef<HTMLInputElement>(null);
   const { data: session, status } = useSession();
+  const [savedResumes, setSavedResumes] = useState<string[]>([]);
+
+  useEffect(() => {
+    setSavedResumes(Object.keys(localStorage).filter(k => k.startsWith('profile/')).map(k => k.split('/')[1]));
+  }, []);
 
   async function handleLoadProfile(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.files && event.target.files[0]) {
@@ -106,6 +112,16 @@ const Header: React.FC<{}> = () => {
       </MenuTrigger>
       <MenuContent>
         <MenuItem onClick={() => router.push('/new')} value="clear"><HiOutlineDocument /> New resume</MenuItem>
+        {!unsavedChanges && savedResumes.length > 0 && <MenuRoot positioning={{ placement: "right-start", gutter: 2 }}>
+          <MenuTriggerItem value="open">
+            <HiOutlineDocument /> Open resume
+          </MenuTriggerItem>
+          <MenuContent>
+            {savedResumes.map(r => <MenuItem key={r} onClick={() => {
+              router.push(`/builder/${r}`);
+            }} value={r}>{r}</MenuItem>)}
+          </MenuContent>
+        </MenuRoot>}
         <MenuItem onClick={() => saveProfileToLocalStorage()} value="save" disabled={!unsavedChanges}><HiOutlineDocumentCheck /> {unsavedChanges ? 'Save changes' : 'Already saved'}</MenuItem>
         <MenuItem onClick={() => downloadProfile()} value="download"><HiOutlineDocumentArrowDown /> Download resume data</MenuItem>
         <MenuItem onClick={() => loadProfileInput.current?.click()} value="load"><HiOutlineDocumentArrowUp /> Load profile</MenuItem>

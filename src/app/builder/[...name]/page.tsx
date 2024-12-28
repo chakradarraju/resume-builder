@@ -12,11 +12,13 @@ const FULLSTORY_ORG_ID = 'o-228D0K-na1';
 const Page: React.FC = () => {
   const {printMode} = useConfig();
   const {setName} = useProfile();
+  // const router = useRouter();
   const params = useParams<{ name: string; }>();
 
   useEffect(() => {
+    console.log('Updating name to', params.name);
     setName(params.name);
-  }, []);
+  }, [params]);
 
   // useEffect(() => {
   //   if (typeof window !== 'undefined') {
