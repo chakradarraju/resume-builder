@@ -120,8 +120,15 @@ const Page: React.FC<{}> = () => {
     setFetchingJD(true);
     const response = await fetch('/api/jd', { method: 'POST', body: JSON.stringify({ url })});
     setFetchingJD(false);
-    if (!response.ok) return;
+    if (!response.ok) {
+      console.log(response.status, response.statusText, await response.text());
+      alert('Unable to fetch JD automatically, please manually copy paste the JD');
+      return;
+    }
     const body = await response.json();
+    if (body.from === 'body' || !body.data || body.data.length < 20 || body.data.length > 10000 || body.data.includes('sign in') || body.data.includes('sign up') || body.data.includes('login')) {
+      alert('Please verify if the fetched JD looks right if not correct it manually (some JD are access restricted)');
+    }
     setFetchedJD(body.data);
   }
 

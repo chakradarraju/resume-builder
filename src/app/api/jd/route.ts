@@ -3,15 +3,11 @@ import { load } from 'cheerio';
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  return NextResponse.json({ data: await fetchUrlText(body.url) });
-}
-
-async function fetchUrlText(url: string): Promise<string> {
-  const response = await fetch(url);
+  const response = await fetch(body.url);
   if (!response.ok) {
     const text = await response.text();
     console.log('Got NOK status fetching', response.status, text);
-    return "";
+    return NextResponse.json({error: 'Unable to fetch URL'}, {status: response.status});
   }
   const text = await response.text();
   const $ = load(text);
@@ -22,30 +18,33 @@ async function fetchUrlText(url: string): Promise<string> {
   $('p, div').each((i, el) => {
     $(el).append('\n');
   });
-  function ret(r: string) {
-    return r.replace(/\s*\n+/g, '\n').replace(/[ \t]+/g, ' ');
+  function ret(r: string, from: string = '') {
+    return NextResponse.json({
+      data: r.replace(/\s*\n+/g, '\n').replace(/[ \t]+/g, ' '),
+      from
+    });
   }
+  $('script, style, iframe').remove();
   const articleText = $('article').text();
   if (articleText.length > 0) {
-    console.log('Returning article text', articleText.length, 'for url', url);
-    return ret(articleText);
+    console.log('Returning article text', articleText.length, 'for url', body.url);
+    return ret(articleText, 'article');
   }
   const mainText = $('main').text();
   if (mainText.length > 0) {
-    console.log('Returning main text', mainText.length, 'for url', url);
-    return ret(mainText);
+    console.log('Returning main text', mainText.length, 'for url', body.url);
+    return ret(mainText, 'main');
   }
   const contentEls = $('.content');
   if (contentEls.length === 1) {
     const contentText = contentEls.text();
     if (contentText.length > 0) {
-      console.log('Returning content text', contentText.length, 'for url', url);
-      return ret(contentText);  
+      console.log('Returning content text', contentText.length, 'for url', body.url);
+      return ret(contentText, 'content');  
     }
   }
-  $('script, style, iframe').remove();
 
   const bodyText = $('body').text();
-  console.log('Returning body text', bodyText.length, 'for url', url)
-  return ret(bodyText);
+  console.log('Returning body text', bodyText.length, 'for url', body.url)
+  return ret(bodyText, 'body');
 }
